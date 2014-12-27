@@ -1,0 +1,2146 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     98786,       2137]
+NotebookOptionsPosition[     96773,       2073]
+NotebookOutlinePosition[     97127,       2089]
+CellTagsIndexPosition[     97084,       2086]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+  "SetDirectory", "[", "\"\</Users/padamson/Mathematica/screens\>\"", "]"}], 
+  ";"}]], "Input",
+ CellChangeTimes->{3.6285579935978613`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"latexreplacements", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\"\<&\>\"", "\[Rule]", "\"\<\\&\>\""}], ",", 
+     RowBox[{"\"\<%\>\"", "\[Rule]", "\"\<\\%\>\""}]}], "}"}]}], 
+  ";"}]], "Input"],
+
+Cell[TextData[{
+ "Defensive stock screen using Graham criteria.\n\n1. Not less than $100 \
+million of annual sales.\n[Note: This works out to $500 million today based \
+on the difference in CPI/Inflation from 1973]\n",
+ StyleBox["2-A. Current assets (\[OpenCurlyDoubleQuote]Total Current Assets\
+\[CloseCurlyDoubleQuote] on MarketWatch) should be at least twice current \
+liabilities (\[OpenCurlyDoubleQuote]Total Current Liabilities\
+\[CloseCurlyDoubleQuote] on MarketWatch).\n2-B. Long-term debt (\
+\[OpenCurlyDoubleQuote]Long-Term Debt\[CloseCurlyDoubleQuote] on MarketWatch) \
+should not exceed the net current assets (\[OpenCurlyDoubleQuote]Total \
+Current Assets\[CloseCurlyDoubleQuote] on MarketWatch).\n",
+  FontWeight->"Bold"],
+ "3. Some earnings for the common stock in each of the past 10 years.\n4. \
+Uninterrupted [dividend] payments for at least the past 20 years.\n5. A \
+minimum increase of at least one-third in per-share earnings in the past 10 \
+years.\n6. Current price should not be more than 15 times average earnings of \
+the past three years.\n7. Current price should not be more than 1-1\:20442 \
+times the book value.\nAs a rule of thumb, we suggest that the product of the \
+multiplier times the ratio of price to book value should not exceed 22.5.\n\n\
+Graham\[CloseCurlyQuote]s recommended price for Defensive quality stocks can \
+be calculated from criteria #6 and #7. This price is popularly known as the \
+Graham Number:\n\nGraham Number = ",
+ Cell[BoxData[
+  FormBox[
+   SqrtBox[
+    RowBox[{"22.5", " ", "*", " ", "EPS", " ", "*", " ", "BVPS"}]], 
+   TraditionalForm]]],
+ "\n\nNote that the Graham Number is designed to quantitatively assess any \
+stock, regardless of sector or industry. For example, a public utility \
+company that is typically low on Earnings will need a higher asset figure to \
+justify its price. Similarly, a Financial Services company that is typically \
+low on assets will need a higher Earnings figure to be an acceptable \
+investment.\n\nGraham recommended a minimum portfolio size of 10 for \
+Defensive quality stocks, or in other words, not more than 10% of total \
+investment per stock."
+}], "Text",
+ CellChangeTimes->{{3.628092122386847*^9, 3.628092136224576*^9}, {
+  3.628092265638281*^9, 3.628092325161323*^9}, {3.628527606368071*^9, 
+  3.62852770468839*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"writeTexfileHeader", "[", "texfile_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"WriteString", "[", 
+      RowBox[{
+      "texfile", ",", "\"\<\\\\documentclass[a4paper,12pt]{article}\\n\>\""}],
+       "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"WriteString", "[", 
+      RowBox[{
+      "texfile", ",", "\"\<\\\\usepackage[margin=1in]{geometry}\\n\>\""}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"WriteString", "[", 
+      RowBox[{
+      "texfile", ",", 
+       "\"\<\\\\usepackage{amsmath, amssymb, graphicx, setspace}\\n\\n\>\""}],
+       "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"WriteString", "[", 
+      RowBox[{"texfile", ",", "\"\<\\\\begin{document}\\n\>\""}], "]"}], 
+     ";"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.62855833819256*^9, 3.6285583707673264`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"GrahamNumber", "[", "ticker_", "]"}], ":=", 
+  RowBox[{"\[Sqrt]", 
+   RowBox[{"(", 
+    RowBox[{"22.5", "*", 
+     RowBox[{"FinancialData", "[", 
+      RowBox[{"ticker", ",", "\"\<EarningsPerShare\>\""}], "]"}], "*", 
+     RowBox[{"FinancialData", "[", 
+      RowBox[{"ticker", ",", "\"\<BookValuePerShare\>\""}], "]"}]}], 
+    ")"}]}]}]], "Input",
+ CellChangeTimes->{{3.6280977010374317`*^9, 3.62809775899254*^9}, {
+  3.6280977968786716`*^9, 3.628097823653071*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"financeNotationToInteger", "[", "stringNumber_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"StringMatchQ", "[", 
+         RowBox[{"stringNumber", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<*B\>\"", ",", "\"\<*M\>\"", ",", "\"\<*K\>\""}], 
+           "}"}]}], "]"}], "\[Equal]", "True"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"stringMultiplier", "=", 
+         RowBox[{"StringTake", "[", 
+          RowBox[{"stringNumber", ",", 
+           RowBox[{"-", "1"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"multiplier", "=", 
+         RowBox[{"Switch", "[", 
+          RowBox[{
+          "stringMultiplier", ",", "\"\<B\>\"", ",", "1000000000", ",", 
+           "\"\<M\>\"", ",", "1000000", ",", "\"\<K\>\"", ",", "1000"}], 
+          "]"}]}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{"multiplier", "=", "1.0"}]}], "\[IndentingNewLine]", "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"ToExpression", "[", 
+        RowBox[{"StringSplit", "[", 
+         RowBox[{"stringNumber", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<B\>\"", ",", "\"\<M\>\"", ",", "\"\<K\>\""}], "}"}]}],
+          "]"}], "]"}], "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "*", "multiplier"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.628461416195115*^9, 3.628461455274994*^9}, {
+  3.6284615088493013`*^9, 3.628461525904361*^9}, {3.628461580806139*^9, 
+  3.62846158136583*^9}, {3.6284617069544773`*^9, 3.62846178263695*^9}, {
+  3.628461857580997*^9, 3.6284618883311577`*^9}, {3.628462027790662*^9, 
+  3.628462161337924*^9}, {3.6284622101848516`*^9, 3.6284622295190487`*^9}, {
+  3.6284622885002127`*^9, 3.6284623568561068`*^9}, {3.628462401048977*^9, 
+  3.6284624153030252`*^9}, {3.628463017928089*^9, 3.628463032541277*^9}, {
+  3.628468182089244*^9, 3.628468189678789*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"generateFilename", "[", 
+   RowBox[{"head_", ",", "directory_", ",", "extension_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"filedate", " ", "=", " ", 
+      RowBox[{"DateString", "[", 
+       RowBox[{"{", 
+        RowBox[{
+        "\"\<Hour24\>\"", ",", " ", "\"\<Minute\>\"", ",", " ", "\"\<.\>\"", 
+         ",", " ", "\"\<Second\>\"", ",", " ", "\"\<-\>\"", ",", " ", 
+         "\"\<MonthShort\>\"", ",", " ", "\"\<-\>\"", ",", " ", "\"\<Day\>\"",
+          ",", " ", "\"\<-\>\"", ",", " ", "\"\<Year\>\""}], "}"}], "]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"StringJoin", "[", 
+      RowBox[{
+       RowBox[{"Directory", "[", "]"}], ",", "\"\</\>\"", ",", "directory", 
+       ",", "\"\</\>\"", ",", "head", ",", "\"\<-\>\"", ",", " ", "filedate", 
+       ",", " ", "\"\<.\>\"", ",", "extension"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.6285573880851*^9, 3.628557493560524*^9}, {
+  3.6285575355303907`*^9, 3.62855753939995*^9}, {3.628557768655438*^9, 
+  3.6285577769745502`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\"\<https://screener.finance.yahoo.com/b?sc=&im=&prmin=10&prmax=\
+&mcmin=500000000&mcmax=&dvymin=1&dvymax=&betamin=&betamax=&remin=500000000&\
+remax=&pmmin=&pmmax=&pemin=&pemax=15&pbmin=&pbmax=1.5&psmin=&psmax=&pegmin=&\
+pegmax=&gr=&grfy=&ar=&vw=0&db=stocks\>\""], "Input",
+ CellChangeTimes->{{3.628642799621098*^9, 3.628642836474272*^9}}],
+
+Cell[BoxData["\<\"https://screener.finance.yahoo.com/b?sc=&im=&prmin=10&prmax=\
+&mcmin=500000000&mcmax=&dvymin=1&dvymax=&betamin=&betamax=&remin=500000000&\
+remax=&pmmin=&pmmax=&pemin=&pemax=15&pbmin=&pbmax=1.5&psmin=&psmax=&pegmin=&\
+pegmax=&gr=&grfy=&ar=&vw=0&db=stocks\"\>"], "Output",
+ CellChangeTimes->{3.6286440456161633`*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"fundamentalsTable", "[", 
+   RowBox[{"ticker_", ",", "texfile_"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"fundamentalsTableFilename", " ", "=", " ", 
+      RowBox[{"generateFilename", "[", 
+       RowBox[{
+        RowBox[{"StringJoin", "[", 
+         RowBox[{"ticker", ",", "\"\<-fundamentals\>\""}], "]"}], ",", 
+        "\"\<tables\>\"", ",", "\"\<eps\>\""}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"rawdataBS", "=", 
+      RowBox[{"ImportString", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"httpGet", "[", "\[IndentingNewLine]", 
+         RowBox[{"StringJoin", "[", 
+          RowBox[{
+          "\"\<http://www.marketwatch.com/investing/stock/\>\"", ",", 
+           "ticker", ",", "\"\</financials/balance-sheet\>\""}], "]"}], 
+         "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"{", 
+         RowBox[{"\"\<HTML\>\"", ",", "\"\<Data\>\""}], "}"}]}], 
+       "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"TrueQ", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Length", "[", 
+           RowBox[{"rawdataBS", "[", 
+            RowBox[{"[", 
+             RowBox[{"1", ",", "1", ",", "1"}], "]"}], "]"}], "]"}], 
+          "\[Equal]", "7"}], "&&", 
+         RowBox[{"StringQ", "[", 
+          RowBox[{"rawdataBS", "[", 
+           RowBox[{"[", 
+            RowBox[{"1", ",", "1", ",", "1", ",", "1"}], "]"}], "]"}], 
+          "]"}]}], "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"(", "\[IndentingNewLine]", 
+        RowBox[{"(*", " ", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+           "may", " ", "use", " ", "the", " ", "next", " ", "4", " ", "lines",
+             " ", "eventually", "\[IndentingNewLine]", "headingBS"}], "=", 
+           RowBox[{"rawdataBS", "[", 
+            RowBox[{"[", 
+             RowBox[{"1", ",", "1", ",", "1", ",", 
+              RowBox[{"1", ";;", "6"}]}], "]"}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"headingBS", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], "=", "ticker"}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"currentAssets", "=", 
+           RowBox[{"rawdataBS", "[", 
+            RowBox[{"[", 
+             RowBox[{"1", ",", "1", ",", "2"}], "]"}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"liabilities", "=", 
+           RowBox[{"rawdataBS", "[", 
+            RowBox[{"[", 
+             RowBox[{"1", ",", "2", ",", "2"}], "]"}], "]"}]}], ";"}], 
+         "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"Export", "[", 
+          RowBox[{"fundamentalsTableFilename", ",", 
+           RowBox[{"Graphics", "[", 
+            RowBox[{
+             RowBox[{
+             "Text", "[", "\"\<Fundamentals table not available\>\"", "]"}], 
+             ",", 
+             RowBox[{"ImageSize", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"180", ",", "15"}], "}"}]}], ",", 
+             RowBox[{"Background", "\[Rule]", 
+              RowBox[{"GrayLevel", "[", ".8", "]"}]}]}], "]"}]}], "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Return", "[", 
+          RowBox[{"{", 
+           RowBox[{"0.", ",", "0."}], "}"}], "]"}], ";"}], 
+        "\[IndentingNewLine]", ")"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"headingBS", "=", 
+          RowBox[{"rawdataBS", "[", 
+           RowBox[{"[", 
+            RowBox[{"1", ",", "1", ",", "1", ",", "1", ",", 
+             RowBox[{"1", ";;", "6"}]}], "]"}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"headingBS", "[", 
+           RowBox[{"[", "1", "]"}], "]"}], "=", "\"\<\>\""}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"currentAssets", "=", 
+          RowBox[{"rawdataBS", "[", 
+           RowBox[{"[", 
+            RowBox[{"1", ",", "1", ",", "1", ",", "2"}], "]"}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"liabilities", "=", 
+          RowBox[{"rawdataBS", "[", 
+           RowBox[{"[", 
+            RowBox[{"1", ",", "2", ",", "2"}], "]"}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"iTotalCurrentAssets", "=", "20"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"iTotalCurrentLiabilities", "=", "11"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"iLongTermDebt", "=", "12"}], ";", "\[IndentingNewLine]", 
+         "\[IndentingNewLine]", 
+         RowBox[{"(*", " ", 
+          RowBox[{"Convert", " ", "Total", " ", "Current", " ", "Assets"}], 
+          " ", "*)"}], "\[IndentingNewLine]", 
+         RowBox[{"Do", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"currentAssets", "[", 
+             RowBox[{"[", 
+              RowBox[{"iTotalCurrentAssets", ",", "i"}], "]"}], "]"}], "=", 
+            RowBox[{"financeNotationToInteger", "[", 
+             RowBox[{"currentAssets", "[", 
+              RowBox[{"[", 
+               RowBox[{"iTotalCurrentAssets", ",", "i"}], "]"}], "]"}], 
+             "]"}]}], ",", 
+           RowBox[{"{", 
+            RowBox[{"i", ",", "2", ",", "6"}], "}"}]}], "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Do", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"liabilities", "[", 
+             RowBox[{"[", 
+              RowBox[{"iTotalCurrentLiabilities", ",", "i"}], "]"}], "]"}], 
+            "=", 
+            RowBox[{"financeNotationToInteger", "[", 
+             RowBox[{"liabilities", "[", 
+              RowBox[{"[", 
+               RowBox[{"iTotalCurrentLiabilities", ",", "i"}], "]"}], "]"}], 
+             "]"}]}], ",", 
+           RowBox[{"{", 
+            RowBox[{"i", ",", "2", ",", "6"}], "}"}]}], "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Do", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"liabilities", "[", 
+             RowBox[{"[", 
+              RowBox[{"iLongTermDebt", ",", "i"}], "]"}], "]"}], "=", 
+            RowBox[{"financeNotationToInteger", "[", 
+             RowBox[{"liabilities", "[", 
+              RowBox[{"[", 
+               RowBox[{"iLongTermDebt", ",", "i"}], "]"}], "]"}], "]"}]}], 
+           ",", 
+           RowBox[{"{", 
+            RowBox[{"i", ",", "2", ",", "6"}], "}"}]}], "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"ratioCurrentAssetsToCurrentLiabilities", "=", 
+          RowBox[{"Flatten", "[", 
+           RowBox[{"{", 
+            RowBox[{"\"\<Current Assets / Current Liabilities\>\"", ",", 
+             RowBox[{"Table", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"currentAssets", "[", 
+                 RowBox[{"[", 
+                  RowBox[{"iTotalCurrentAssets", ",", "i"}], "]"}], "]"}], 
+                "/", 
+                RowBox[{"liabilities", "[", 
+                 RowBox[{"[", 
+                  RowBox[{"iTotalCurrentLiabilities", ",", "i"}], "]"}], 
+                 "]"}]}], ",", 
+               RowBox[{"{", 
+                RowBox[{"i", ",", "2", ",", "6"}], "}"}]}], "]"}]}], "}"}], 
+           "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"ratioCurrentAssetsToLongTermDebt", "=", 
+          RowBox[{"Flatten", "[", 
+           RowBox[{"{", 
+            RowBox[{"\"\<Current Assets / Long-Term Debt\>\"", ",", 
+             RowBox[{"Table", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"currentAssets", "[", 
+                 RowBox[{"[", 
+                  RowBox[{"iTotalCurrentAssets", ",", "i"}], "]"}], "]"}], 
+                "/", 
+                RowBox[{"liabilities", "[", 
+                 RowBox[{"[", 
+                  RowBox[{"iLongTermDebt", ",", "i"}], "]"}], "]"}]}], ",", 
+               RowBox[{"{", 
+                RowBox[{"i", ",", "2", ",", "6"}], "}"}]}], "]"}]}], "}"}], 
+           "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"rawdataFinancials", "=", 
+          RowBox[{"ImportString", "[", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"httpGet", "[", "\[IndentingNewLine]", 
+             RowBox[{"StringJoin", "[", 
+              RowBox[{
+              "\"\<http://www.marketwatch.com/investing/stock/\>\"", ",", 
+               "ticker", ",", "\"\</financials\>\""}], "]"}], 
+             "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
+            RowBox[{"{", 
+             RowBox[{"\"\<HTML\>\"", ",", "\"\<Data\>\""}], "}"}]}], 
+           "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"incomeData2", "=", 
+          RowBox[{"rawdataFinancials", "[", 
+           RowBox[{"[", 
+            RowBox[{"1", ",", "2", ",", "2", ",", "All", ",", 
+             RowBox[{"1", ";;", "6"}]}], "]"}], "]"}]}], ";", 
+         "\[IndentingNewLine]", "\[IndentingNewLine]", 
+         RowBox[{"(*", 
+          RowBox[{"Export", "[", 
+           RowBox[{"fundamentalsTableFilename", ",", 
+            RowBox[{"TableForm", "[", 
+             RowBox[{
+              RowBox[{"List", "[", 
+               RowBox[{
+                RowBox[{"currentAssets", "[", 
+                 RowBox[{"[", "20", "]"}], "]"}], ",", 
+                RowBox[{"liabilities", "[", 
+                 RowBox[{"[", "11", "]"}], "]"}], ",", 
+                RowBox[{"liabilities", "[", 
+                 RowBox[{"[", "12", "]"}], "]"}], ",", 
+                "ratioCurrentAssetsToCurrentLiabilities", ",", 
+                "ratioCurrentAssetsToLongTermDebt", ",", 
+                RowBox[{"incomeData2", "[", 
+                 RowBox[{"[", "38", "]"}], "]"}], ",", 
+                RowBox[{"incomeData2", "[", 
+                 RowBox[{"[", "39", "]"}], "]"}]}], "]"}], ",", 
+              RowBox[{"TableHeadings", "\[Rule]", 
+               RowBox[{"{", 
+                RowBox[{"None", ",", "headingBS"}], "}"}]}]}], "]"}]}], "]"}],
+           "*)"}], "\[IndentingNewLine]", 
+         RowBox[{"(*", " ", 
+          RowBox[{
+          "Remove", " ", "texfile", " ", "from", " ", "arguments", " ", "and",
+            " ", "uncomment", " ", "next", " ", "line", " ", "to", " ", 
+           RowBox[{"debug", "."}]}], "*)"}], "\[IndentingNewLine]", 
+         RowBox[{"(*", 
+          RowBox[{
+           RowBox[{"TableForm", "[", 
+            RowBox[{
+             RowBox[{"List", "[", 
+              RowBox[{
+               RowBox[{"currentAssets", "[", 
+                RowBox[{"[", "iTotalCurrentAssets", "]"}], "]"}], ",", 
+               RowBox[{"liabilities", "[", 
+                RowBox[{"[", "iTotalCurrentLiabilities", "]"}], "]"}], ",", 
+               RowBox[{"liabilities", "[", 
+                RowBox[{"[", "iLongTermDebt", "]"}], "]"}], ",", 
+               "ratioCurrentAssetsToCurrentLiabilities", ",", 
+               "ratioCurrentAssetsToLongTermDebt", ",", 
+               RowBox[{"incomeData2", "[", 
+                RowBox[{"[", "38", "]"}], "]"}], ",", 
+               RowBox[{"incomeData2", "[", 
+                RowBox[{"[", "39", "]"}], "]"}]}], "]"}], ",", 
+             RowBox[{"TableHeadings", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"None", ",", "headingBS"}], "}"}]}]}], "]"}], ";"}], 
+          "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"ratioCurrentAssetsToCurrentLiabilities", "[", 
+              RowBox[{"[", "6", "]"}], "]"}], ">", "1.3"}], "&&", 
+            RowBox[{
+             RowBox[{"ratioCurrentAssetsToLongTermDebt", "[", 
+              RowBox[{"[", "6", "]"}], "]"}], ">", "1.0"}]}], ",", 
+           RowBox[{"(", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"WriteString", "[", 
+              RowBox[{
+              "texfile", ",", "\"\<\\n\\\\begin{table}[!htb]\\n\>\""}], "]"}],
+              ";", "\[IndentingNewLine]", 
+             RowBox[{"WriteString", "[", 
+              RowBox[{"texfile", ",", "\"\<\\\\centering\\n\>\""}], "]"}], 
+             ";", "\[IndentingNewLine]", 
+             RowBox[{"WriteString", "[", 
+              RowBox[{"texfile", ",", 
+               RowBox[{"StringJoin", "[", 
+                RowBox[{
+                "\"\<\\\\caption{\>\"", ",", "ticker", ",", 
+                 "\"\< fundamentals}\\n\>\""}], "]"}]}], "]"}], ";", 
+             "\[IndentingNewLine]", 
+             RowBox[{"WriteString", "[", 
+              RowBox[{"texfile", ",", 
+               RowBox[{"StringJoin", "[", 
+                RowBox[{
+                "\"\<\\\\includegraphics{\>\"", ",", 
+                 "fundamentalsTableFilename", ",", "\"\<}\\n\>\""}], "]"}]}], 
+              "]"}], ";", "\[IndentingNewLine]", 
+             RowBox[{"WriteString", "[", 
+              RowBox[{"texfile", ",", 
+               RowBox[{"StringJoin", "[", 
+                RowBox[{
+                "\"\<\\\\label{fig:\>\"", ",", "ticker", ",", 
+                 "\"\<-fundamentals}\\n\>\""}], "]"}]}], "]"}], ";", 
+             "\[IndentingNewLine]", 
+             RowBox[{"WriteString", "[", 
+              RowBox[{"texfile", ",", "\"\<\\\\end{table}\\n\\n\>\""}], "]"}],
+              ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+             RowBox[{"Export", "[", 
+              RowBox[{"fundamentalsTableFilename", ",", 
+               RowBox[{"Grid", "[", 
+                RowBox[{
+                 RowBox[{"List", "[", 
+                  RowBox[{"headingBS", ",", 
+                   RowBox[{"currentAssets", "[", 
+                    RowBox[{"[", "iTotalCurrentAssets", "]"}], "]"}], ",", 
+                   RowBox[{"liabilities", "[", 
+                    RowBox[{"[", "iTotalCurrentLiabilities", "]"}], "]"}], 
+                   ",", 
+                   RowBox[{"liabilities", "[", 
+                    RowBox[{"[", "iLongTermDebt", "]"}], "]"}], ",", 
+                   "ratioCurrentAssetsToCurrentLiabilities", ",", 
+                   "ratioCurrentAssetsToLongTermDebt", ",", 
+                   RowBox[{"incomeData2", "[", 
+                    RowBox[{"[", "38", "]"}], "]"}], ",", 
+                   RowBox[{"incomeData2", "[", 
+                    RowBox[{"[", "39", "]"}], "]"}]}], "]"}], ",", 
+                 RowBox[{"Alignment", "\[Rule]", 
+                  RowBox[{"{", 
+                   RowBox[{"{", 
+                    RowBox[{"Right", ",", "Center"}], "}"}], "}"}]}], ",", 
+                 RowBox[{"Frame", "\[Rule]", "All"}]}], "]"}]}], "]"}]}], 
+            ")"}]}], "]"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"Return", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"ratioCurrentAssetsToCurrentLiabilities", "[", 
+             RowBox[{"[", "6", "]"}], "]"}], ",", 
+            RowBox[{"ratioCurrentAssetsToLongTermDebt", "[", 
+             RowBox[{"[", "6", "]"}], "]"}]}], "}"}], "]"}], ";"}], 
+        "\[IndentingNewLine]", ")"}]}], "]"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.628531631769595*^9, 3.6285318112062683`*^9}, {
+   3.6285318643330593`*^9, 3.6285318786133966`*^9}, {3.628536081107263*^9, 
+   3.62853612496183*^9}, {3.628552079579239*^9, 3.6285520800203257`*^9}, {
+   3.628552155883685*^9, 3.628552169197897*^9}, {3.6285521995960073`*^9, 
+   3.628552203587407*^9}, {3.6285522392921*^9, 3.628552261386497*^9}, {
+   3.628552394611474*^9, 3.62855240991393*^9}, {3.6285528420435257`*^9, 
+   3.628552881189846*^9}, {3.6285529240395727`*^9, 3.628552925636404*^9}, {
+   3.628553115958218*^9, 3.6285531200481243`*^9}, {3.628553794685598*^9, 
+   3.628553861234034*^9}, {3.628553900188382*^9, 3.628553932751087*^9}, {
+   3.6285558039188747`*^9, 3.628555839975025*^9}, {3.6285558804949713`*^9, 
+   3.628555913441884*^9}, {3.628556768825384*^9, 3.6285567954308977`*^9}, {
+   3.628557546482299*^9, 3.628557586552953*^9}, {3.628601924428111*^9, 
+   3.628601952578229*^9}, {3.628601994592957*^9, 3.628601994744676*^9}, {
+   3.6286038254509687`*^9, 3.628603841760356*^9}, {3.628604023874194*^9, 
+   3.6286040370921993`*^9}, {3.62860409350456*^9, 3.6286040985202427`*^9}, {
+   3.6286041414456387`*^9, 3.628604161772407*^9}, {3.628605423763591*^9, 
+   3.628605439931991*^9}, {3.6286056545634727`*^9, 3.62860584522082*^9}, 
+   3.628606120578196*^9, {3.628606182750989*^9, 3.628606245956768*^9}, {
+   3.628606315406728*^9, 3.628606392743376*^9}, {3.6286064403884687`*^9, 
+   3.628606622179578*^9}, {3.6286068278785257`*^9, 3.628606838012187*^9}, {
+   3.628607300370677*^9, 3.6286073056020737`*^9}, {3.6286132123697863`*^9, 
+   3.628613225592478*^9}, {3.62861440637331*^9, 3.62861456280516*^9}, {
+   3.62861466837*^9, 3.6286148507684*^9}, {3.628614882497492*^9, 
+   3.6286149700469303`*^9}, {3.6286151627909718`*^9, 3.628615200156103*^9}, {
+   3.6286153177126617`*^9, 3.628615335425185*^9}, {3.628643750592581*^9, 
+   3.628643821483724*^9}, {3.628643868673903*^9, 3.6286439195496187`*^9}, {
+   3.628643999694071*^9, 3.628644009589614*^9}, {3.62864426695172*^9, 
+   3.628644288476573*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"UninterruptedLongtermDividends", "[", "ticker_", "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"dividends", "=", "\[IndentingNewLine]", 
+      RowBox[{"Check", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"FinancialData", "[", 
+         RowBox[{"ticker", ",", "\"\<Dividend\>\"", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"DatePlus", "[", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "22"}], ",", "\"\<Year\>\""}], "}"}], "]"}], ",", 
+            
+            RowBox[{"DatePlus", "[", "0", "]"}]}], "}"}]}], "]"}], ",", 
+        "\[IndentingNewLine]", "$Failed"}], "\[IndentingNewLine]", "]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"dividends", "\[Equal]", "$Failed"}], "||", 
+        RowBox[{"dividends", "\[Equal]", 
+         RowBox[{"Missing", "[", "\"\<NotAvailable\>\"", "]"}]}]}], ",", 
+       RowBox[{"Return", "[", "False", "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"uniqueDateList", "=", 
+      RowBox[{"DeleteDuplicates", "[", 
+       RowBox[{"dividends", "[", 
+        RowBox[{"[", 
+         RowBox[{"All", ",", "1", ",", "1"}], "]"}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"continuousDateList", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{"i", ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", 
+          RowBox[{"First", "[", "uniqueDateList", "]"}], ",", 
+          RowBox[{"Last", "[", "uniqueDateList", "]"}]}], "}"}]}], "]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"Last", "[", "uniqueDateList", "]"}], "-", 
+          RowBox[{"First", "[", "uniqueDateList", "]"}]}], "\[GreaterEqual]", 
+         "20"}], "&&", 
+        RowBox[{"uniqueDateList", "==", "continuousDateList"}], "&&", 
+        RowBox[{
+         RowBox[{"Last", "[", "uniqueDateList", "]"}], "\[GreaterEqual]", 
+         RowBox[{
+          RowBox[{"DatePlus", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"-", "1"}], ",", "\"\<Year\>\""}], "}"}], "]"}], "[", 
+          RowBox[{"[", "1", "]"}], "]"}]}]}], ",", 
+       RowBox[{"Return", "[", "True", "]"}], ",", 
+       RowBox[{"Return", "[", "False", "]"}]}], "\[IndentingNewLine]", 
+      "]"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{
+  3.628100189027253*^9, {3.628104584512001*^9, 3.6281046428597116`*^9}, {
+   3.6281048658679037`*^9, 3.628104963653245*^9}, {3.628105000454587*^9, 
+   3.628105002490394*^9}, {3.6281050342104673`*^9, 3.628105052080461*^9}, {
+   3.628105084313196*^9, 3.628105090982966*^9}, {3.6281051369589043`*^9, 
+   3.628105180819819*^9}, {3.628105226082732*^9, 3.62810539737895*^9}, {
+   3.628105434467308*^9, 3.628105546036927*^9}, {3.628105605852532*^9, 
+   3.628105698669162*^9}, {3.628105733467029*^9, 3.62810578226565*^9}, {
+   3.628105935834764*^9, 3.628106014422955*^9}, {3.62810605850991*^9, 
+   3.6281060678286743`*^9}, {3.6281060985483913`*^9, 3.628106166306623*^9}, {
+   3.628118501613494*^9, 3.6281185548187838`*^9}, {3.628118617721602*^9, 
+   3.628118656964816*^9}, {3.628118706468829*^9, 3.628118721161631*^9}, {
+   3.6281198212418957`*^9, 3.628119848647191*^9}, {3.628119923741487*^9, 
+   3.628119963417844*^9}, {3.628120008969204*^9, 3.6281200686129293`*^9}, {
+   3.628120110899438*^9, 3.62812019442365*^9}, {3.6281203038983583`*^9, 
+   3.628120351888185*^9}, {3.628120401751082*^9, 3.628120404893581*^9}, {
+   3.6281207658970537`*^9, 3.62812084357003*^9}, {3.6281209256726217`*^9, 
+   3.628120935501953*^9}, {3.628120978262127*^9, 3.628120998258356*^9}, {
+   3.62812106897753*^9, 3.628121083870902*^9}, {3.628123824530616*^9, 
+   3.62812382952917*^9}, {3.628123861015616*^9, 3.628123890734242*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<JLink`\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.6280942379923973`*^9, 3.628094237993617*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"httpGet", "[", "url_String", "]"}], ":=", 
+  RowBox[{"JavaBlock", "@", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"http", ",", "get"}], "}"}], ",", 
+     RowBox[{
+      RowBox[{"http", "=", 
+       RowBox[{
+       "JavaNew", "[", "\"\<org.apache.commons.httpclient.HttpClient\>\"", 
+        "]"}]}], ";", 
+      RowBox[{"get", "=", 
+       RowBox[{"JavaNew", "[", 
+        RowBox[{
+        "\"\<org.apache.commons.httpclient.methods.GetMethod\>\"", ",", 
+         "url"}], "]"}]}], ";", 
+      RowBox[{"http", "@", 
+       RowBox[{"executeMethod", "[", "get", "]"}]}], ";", 
+      RowBox[{"get", "@", 
+       RowBox[{"getResponseBodyAsString", "[", "]"}]}]}]}], 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.628094463662801*^9, 3.62809446366395*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"yahooFinancialData", "[", 
+   RowBox[{"ticker_", ",", "options_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+     "baseurl", "=", 
+      "\"\<http://download.finance.yahoo.com/d/quotes.csv?s=%40%5EDJI,\>\""}],
+      ";", "\[IndentingNewLine]", 
+     RowBox[{"rawdata", "=", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Import", "[", "\[IndentingNewLine]", 
+        RowBox[{"StringJoin", "[", 
+         RowBox[{"baseurl", ",", "ticker", ",", "\"\<&f=\>\"", ",", 
+          RowBox[{"StringJoin", "[", "options", "]"}]}], "]"}], 
+        "\[IndentingNewLine]", "]"}], "[", 
+       RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "rawdata", "]"}], "\[Equal]", "1"}], ",", 
+       RowBox[{"rawdata", "[", 
+        RowBox[{"[", "1", "]"}], "]"}], ",", "rawdata"}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.6284657631547832`*^9, 3.6284659269877234`*^9}, {
+  3.628465961003222*^9, 3.6284659622585077`*^9}, {3.628466009433742*^9, 
+  3.628466011287703*^9}, {3.62846606182963*^9, 3.628466066678562*^9}, {
+  3.628466229401403*^9, 3.628466235087903*^9}, {3.6284662793056393`*^9, 
+  3.628466319821189*^9}, {3.6284663603807364`*^9, 3.6284664108852177`*^9}, {
+  3.628466500614175*^9, 3.628466530589319*^9}, {3.6284665766135*^9, 
+  3.628466586315023*^9}, {3.628466619258984*^9, 3.628466651912278*^9}}],
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{"getGrahamScreenData", ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+      "Scrape", " ", "data", " ", "from", " ", "Yahoo", " ", "Finance", " ", 
+       "using", " ", "the", " ", "following", " ", 
+       RowBox[{"screen", ":"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Price", "/", "Book"}], " ", "<", " ", 
+       RowBox[{"1.5", "\[IndentingNewLine]", 
+        RowBox[{"Market", " ", "Cap"}]}], " ", ">", " ", 
+       RowBox[{"100", "M", "\[IndentingNewLine]", 
+        RowBox[{"Stock", " ", "Price"}]}], " ", ">", " ", 
+       RowBox[{"10", "\[IndentingNewLine]", 
+        RowBox[{"P", "/", "E"}]}], " ", "<", " ", 
+       RowBox[{"15", "\[IndentingNewLine]", "Revenue"}], " ", ">", " ", 
+       "$500M"}], "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"baseurl", "=", 
+       RowBox[{"{", 
+        RowBox[{
+        "\"\<http://screener.finance.yahoo.com/b?vw=0&b=\>\"", ",", 
+         "\"\<&s=nm&pe=/15&pr=10/&mc=100000000/&dvy=0.1/&pb=/1.5&re=500000000/\
+&db=stocks\>\""}], "}"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"gooddata", "=", "False"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"While", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Not", "[", "gooddata", "]"}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"Pause", "[", "0.5", "]"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"rawdata", "=", 
+          RowBox[{"ImportString", "[", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"httpGet", "[", "\[IndentingNewLine]", 
+             RowBox[{"StringJoin", "[", 
+              RowBox[{
+               RowBox[{"baseurl", "[", 
+                RowBox[{"[", "1", "]"}], "]"}], ",", "\"\<1\>\"", ",", 
+               RowBox[{"baseurl", "[", 
+                RowBox[{"[", "2", "]"}], "]"}]}], "]"}], 
+             "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
+            RowBox[{"{", 
+             RowBox[{"\"\<HTML\>\"", ",", "\"\<Data\>\""}], "}"}]}], 
+           "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"gooddata", "=", 
+          RowBox[{"StringFreeQ", "[", 
+           RowBox[{
+            RowBox[{"ToString", "[", "rawdata", "]"}], ",", 
+            "\"\<Will be right back...\>\""}], "]"}]}]}]}], 
+       "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"numberofstocks", "=", 
+       RowBox[{"FromDigits", "[", 
+        RowBox[{"StringReplace", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Flatten", "[", 
+            RowBox[{"StringSplit", "[", 
+             RowBox[{"rawdata", "[", 
+              RowBox[{"[", 
+               RowBox[{"1", ",", "1"}], "]"}], "]"}], "]"}], "]"}], "[", 
+           RowBox[{"[", "10", "]"}], "]"}], ",", 
+          RowBox[{"\"\<)\>\"", "\[Rule]", "\"\<\>\""}]}], "]"}], "]"}]}], ";",
+       "\[IndentingNewLine]", 
+      RowBox[{"rawdata", "=", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"rawdata", "[", 
+          RowBox[{"[", "2", "]"}], "]"}], "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "[", 
+        RowBox[{"[", 
+         RowBox[{"All", ",", 
+          RowBox[{"1", ";;", "19"}]}], "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"heading", "=", 
+       RowBox[{"rawdata", "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"rawdata", "[", 
+        RowBox[{"[", 
+         RowBox[{"2", ";;", "21"}], "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"iurl", "=", 
+       RowBox[{"Table", "[", 
+        RowBox[{"i", ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", "1", ",", "numberofstocks", ",", "20"}], "}"}]}], 
+        "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Do", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"url", "=", 
+          RowBox[{"StringJoin", "[", 
+           RowBox[{
+            RowBox[{"baseurl", "[", 
+             RowBox[{"[", "1", "]"}], "]"}], ",", 
+            RowBox[{"ToString", "[", 
+             RowBox[{"iurl", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+            RowBox[{"baseurl", "[", 
+             RowBox[{"[", "2", "]"}], "]"}]}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"(*", 
+          RowBox[{
+           RowBox[{"url", "=", 
+            RowBox[{"StringJoin", "[", 
+             RowBox[{
+             "\"\<http://screener.finance.yahoo.com/b?vw=0&b=\>\"", ",", 
+              RowBox[{"ToString", "[", 
+               RowBox[{"iurl", "[", 
+                RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+              "\"\<&s=nm&pe=/15&pr=10/&mc=100000000/&dvy=0.1/&pb=/1.5&re=\
+500000000/&db=stocks\>\""}], "]"}]}], ";"}], "*)"}], "\[IndentingNewLine]", 
+         RowBox[{"gooddata", "=", "False"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"While", "[", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"Not", "[", "gooddata", "]"}], ",", "\[IndentingNewLine]", 
+           
+           RowBox[{
+            RowBox[{"Pause", "[", "0.5", "]"}], ";", "\[IndentingNewLine]", 
+            RowBox[{"rawdata", "=", 
+             RowBox[{"ImportString", "[", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"httpGet", "[", "\[IndentingNewLine]", 
+                RowBox[{"StringJoin", "[", 
+                 RowBox[{
+                  RowBox[{"baseurl", "[", 
+                   RowBox[{"[", "1", "]"}], "]"}], ",", 
+                  RowBox[{"ToString", "[", 
+                   RowBox[{"iurl", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+                  RowBox[{"baseurl", "[", 
+                   RowBox[{"[", "2", "]"}], "]"}]}], "]"}], 
+                "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
+               RowBox[{"{", 
+                RowBox[{"\"\<HTML\>\"", ",", "\"\<Data\>\""}], "}"}]}], 
+              "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
+            RowBox[{"gooddata", "=", 
+             RowBox[{"StringFreeQ", "[", 
+              RowBox[{
+               RowBox[{"ToString", "[", "rawdata", "]"}], ",", 
+               "\"\<Will be right back...\>\""}], "]"}]}]}]}], 
+          "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"rawdata", "=", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"rawdata", "[", 
+             RowBox[{"[", "2", "]"}], "]"}], "[", 
+            RowBox[{"[", "1", "]"}], "]"}], "[", 
+           RowBox[{"[", 
+            RowBox[{"All", ",", 
+             RowBox[{"1", ";;", "19"}]}], "]"}], "]"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"processeddata", "=", 
+          RowBox[{"Join", "[", 
+           RowBox[{"processeddata", ",", 
+            RowBox[{"rawdata", "[", 
+             RowBox[{"[", 
+              RowBox[{"2", ";;", 
+               RowBox[{"Length", "[", "rawdata", "]"}]}], "]"}], "]"}]}], 
+           "]"}]}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "2", ",", 
+          RowBox[{"Length", "[", "iurl", "]"}]}], "}"}]}], 
+       "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Print", "[", "\"\<Scraped data from yahoo screen\>\"", "]"}], 
+      ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"(*", " ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Drop", " ", "\"\<Index Mem\>\""}], " ", "-", " ", "4"}], 
+        ",", " ", 
+        RowBox[{"\"\<Return %\>\"", " ", "-", " ", "9"}], ",", " ", 
+        RowBox[{"\"\<Growth\>\"", " ", "-", " ", 
+         RowBox[{"18", " ", "columns"}]}]}], " ", "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{
+      "Print", "[", 
+       "\"\<Dropped Index Mem (4), Return % (9), and Growth (18) columns\>\"",
+        "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"Drop", "[", 
+        RowBox[{"processeddata", ",", "None", ",", 
+         RowBox[{"{", "18", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"heading", "=", 
+       RowBox[{"Drop", "[", 
+        RowBox[{"heading", ",", 
+         RowBox[{"{", "18", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"Drop", "[", 
+        RowBox[{"processeddata", ",", "None", ",", 
+         RowBox[{"{", "9", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"heading", "=", 
+       RowBox[{"Drop", "[", 
+        RowBox[{"heading", ",", 
+         RowBox[{"{", "9", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"Drop", "[", 
+        RowBox[{"processeddata", ",", "None", ",", 
+         RowBox[{"{", "4", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"heading", "=", 
+       RowBox[{"Drop", "[", 
+        RowBox[{"heading", ",", 
+         RowBox[{"{", "4", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"heading", "[", 
+        RowBox[{"[", "4", "]"}], "]"}], "=", "\"\<Price\>\""}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"(*", " ", 
+       RowBox[{
+       "Convert", " ", "strings", " ", "in", " ", "data", " ", "to", " ", 
+        "numbers"}], " ", "*)"}], "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"heading", "[", 
+        RowBox[{"[", "7", "]"}], "]"}], "=", "\"\<Div/Yld (%)\>\""}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Do", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"processeddata", "[", 
+          RowBox[{"[", 
+           RowBox[{"i", ",", "7"}], "]"}], "]"}], "=", 
+         RowBox[{"ToExpression", "[", 
+          RowBox[{"StringDrop", "[", 
+           RowBox[{
+            RowBox[{"processeddata", "[", 
+             RowBox[{"[", 
+              RowBox[{"i", ",", "7"}], "]"}], "]"}], ",", 
+            RowBox[{"-", "1"}]}], "]"}], "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", 
+          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
+      ";", 
+      RowBox[{"Do", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"processeddata", "[", 
+          RowBox[{"[", 
+           RowBox[{"i", ",", "6"}], "]"}], "]"}], "=", 
+         RowBox[{"financeNotationToInteger", "[", 
+          RowBox[{"processeddata", "[", 
+           RowBox[{"[", 
+            RowBox[{"i", ",", "6"}], "]"}], "]"}], "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", 
+          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
+      ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"(*", " ", 
+       RowBox[{
+       "Screen", " ", "out", " ", "banks", " ", "and", " ", "insurance", " ", 
+        "companies"}], " ", "*)"}], "\[IndentingNewLine]", 
+      RowBox[{
+      "Print", "[", "\"\<Removed banks and insurance companies\>\"", "]"}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"Select", "[", 
+        RowBox[{"processeddata", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"StringMatchQ", "[", 
+            RowBox[{
+             RowBox[{"#", "[", 
+              RowBox[{"[", "3", "]"}], "]"}], ",", "\"\<*Insurance*\>\""}], 
+            "]"}], "\[NotEqual]", "True"}], "&"}]}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"Select", "[", 
+        RowBox[{"processeddata", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"StringMatchQ", "[", 
+            RowBox[{
+             RowBox[{"#", "[", 
+              RowBox[{"[", "3", "]"}], "]"}], ",", "\"\<*Banks*\>\""}], "]"}],
+            "\[NotEqual]", "True"}], "&"}]}], "]"}]}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"(*", " ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"Screen", " ", "for"}], " ", ">", 
+          RowBox[{"$500M", " ", "sales", "\[IndentingNewLine]", "PSR"}]}], 
+         "=", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"Market", " ", "Capitalization"}], ")"}], "/", 
+          RowBox[{"(", 
+           RowBox[{"Total", " ", "Sales"}], ")"}]}]}], ",", 
+        RowBox[{
+         RowBox[{"therefore", " ", 
+          RowBox[{"(", 
+           RowBox[{"Total", " ", "Sales"}], ")"}]}], "=", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"Market", " ", "Capitalization"}], ")"}], "/", "PSR"}]}]}],
+        "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
+      RowBox[{"Print", "[", "\"\<Screen for >$500M sales\>\"", "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"Select", "[", 
+        RowBox[{"processeddata", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "13", "]"}], "]"}], ">", "0."}], "&"}]}], "]"}]}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"Select", "[", 
+        RowBox[{"processeddata", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"#", "[", 
+             RowBox[{"[", "6", "]"}], "]"}], "/", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "13", "]"}], "]"}]}], ">", "500000000"}], "&"}]}], 
+        "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"(*", " ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+         "Screen", " ", "for", " ", "some", " ", "value", " ", "of", " ", 
+          "5"}], "-", 
+         RowBox[{"yr", " ", "growth"}]}], ",", " ", 
+        RowBox[{"convert", " ", "to", " ", "number"}], ",", " ", 
+        RowBox[{
+         RowBox[{
+         "then", " ", "screen", " ", "for", " ", "positive", " ", "5"}], "-", 
+         
+         RowBox[{"yr", " ", "growth", " ", "rate"}]}]}], "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{
+      "Print", "[", "\"\<Screen for positive 5-yr growth rate\>\"", "]"}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"Select", "[", 
+        RowBox[{"processeddata", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "15", "]"}], "]"}], "\[NotEqual]", "\"\<N/A\>\""}], 
+          "&"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"heading", "[", 
+        RowBox[{"[", "15", "]"}], "]"}], "=", "\"\<5-yr Growth (%)\>\""}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"Do", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"processeddata", "[", 
+          RowBox[{"[", 
+           RowBox[{"i", ",", "15"}], "]"}], "]"}], "=", 
+         RowBox[{"ToExpression", "[", 
+          RowBox[{"StringDrop", "[", 
+           RowBox[{
+            RowBox[{"processeddata", "[", 
+             RowBox[{"[", 
+              RowBox[{"i", ",", "15"}], "]"}], "]"}], ",", 
+            RowBox[{"-", "1"}]}], "]"}], "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", 
+          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"Select", "[", 
+        RowBox[{"processeddata", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "15", "]"}], "]"}], ">", "0."}], "&"}]}], "]"}]}], 
+      ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"(*", " ", 
+       RowBox[{
+       "Add", " ", "average", " ", "volume", " ", "data", " ", "then", " ", 
+        "screen", " ", "for", " ", "value", " ", "greater", " ", "then", " ", 
+        "500", "k"}], " ", "*)"}], "\[IndentingNewLine]", 
+      RowBox[{
+      "Print", "[", "\"\<Screening for >500k average volume\>\"", "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Do", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"processeddata", "[", 
+          RowBox[{"[", 
+           RowBox[{"i", ",", "5"}], "]"}], "]"}], "=", 
+         RowBox[{"yahooFinancialData", "[", 
+          RowBox[{
+           RowBox[{"processeddata", "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "1"}], "]"}], "]"}], ",", "\"\<a2\>\""}], 
+          "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", 
+          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"Select", "[", 
+        RowBox[{"processeddata", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "5", "]"}], "]"}], ">", "500000"}], "&"}]}], "]"}]}],
+       ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{
+      "Print", "[", 
+       "\"\<Appending Graham Numbers and screening for positive values\>\"", 
+       "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Do", "[", 
+       RowBox[{
+        RowBox[{"AppendTo", "[", 
+         RowBox[{
+          RowBox[{"processeddata", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", 
+          RowBox[{"GrahamNumber", "[", 
+           RowBox[{"processeddata", "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "1"}], "]"}], "]"}], "]"}]}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", 
+          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"heading", ",", "\"\<Graham Number\>\""}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"Select", "[", 
+        RowBox[{"processeddata", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "17", "]"}], "]"}], ">", "0."}], "&"}]}], "]"}]}], 
+      ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{
+      "Print", "[", 
+       "\"\<Screen for stocks with uninterrupted Longterm (20 years) \
+Dividends\>\"", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Do", "[", 
+       RowBox[{
+        RowBox[{"AppendTo", "[", 
+         RowBox[{
+          RowBox[{"processeddata", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", 
+          RowBox[{"UninterruptedLongtermDividends", "[", 
+           RowBox[{"processeddata", "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "1"}], "]"}], "]"}], "]"}]}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", 
+          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"heading", ",", "\"\<Uninterrupted Longterm Dividend\>\""}], 
+       "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"Select", "[", 
+        RowBox[{"processeddata", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "18", "]"}], "]"}], "\[Equal]", "True"}], "&"}]}], 
+        "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{
+      "Print", "[", "\"\<Appending GN/P and sorting in descending order\>\"", 
+       "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Do", "[", 
+       RowBox[{
+        RowBox[{"AppendTo", "[", 
+         RowBox[{
+          RowBox[{"processeddata", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", 
+          RowBox[{
+           RowBox[{"processeddata", "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "17"}], "]"}], "]"}], "/", 
+           RowBox[{"processeddata", "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "4"}], "]"}], "]"}]}]}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", 
+          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"AppendTo", "[", 
+       RowBox[{"heading", ",", "\"\<GN/P\>\""}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"processeddata", "=", 
+       RowBox[{"Sort", "[", 
+        RowBox[{"processeddata", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"#1", "[", 
+            RowBox[{"[", "19", "]"}], "]"}], ">", 
+           RowBox[{"#2", "[", 
+            RowBox[{"[", "19", "]"}], "]"}]}], "&"}]}], "]"}]}], ";", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"Print", "[", 
+       RowBox[{"\"\<The screen resulted in \>\"", ",", 
+        RowBox[{"Length", "[", "processeddata", "]"}], ",", 
+        "\"\< stocks.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"PrependTo", "[", 
+       RowBox[{"processeddata", ",", "heading"}], "]"}], ";", 
+      "\[IndentingNewLine]", "processeddata"}]}], "\[IndentingNewLine]", 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.6280940090854263`*^9, 3.628094010615542*^9}, {
+   3.6280945343598413`*^9, 3.6280945571577044`*^9}, {3.6280947264154863`*^9, 
+   3.62809472694198*^9}, {3.6280948339942636`*^9, 3.628094841896377*^9}, {
+   3.628094872031951*^9, 3.628094886538988*^9}, {3.628094941624267*^9, 
+   3.6280949572140408`*^9}, {3.628095246073659*^9, 3.6280952464085207`*^9}, {
+   3.628096517531468*^9, 3.628096546751109*^9}, {3.628096590110158*^9, 
+   3.628096596033371*^9}, {3.628097264534604*^9, 3.628097276824943*^9}, 
+   3.628097399449321*^9, {3.628097454006219*^9, 3.628097462325601*^9}, {
+   3.6284647745182047`*^9, 3.628464826698737*^9}, {3.6284649111439753`*^9, 
+   3.628464973653399*^9}, {3.628465005780319*^9, 3.6284650747301397`*^9}, {
+   3.6285594302053137`*^9, 3.628559501257576*^9}, {3.628559546576592*^9, 
+   3.628559556488583*^9}, {3.628559592631111*^9, 3.628559605500801*^9}, {
+   3.628559718479196*^9, 3.628559719955246*^9}, 3.628559804166134*^9, {
+   3.628559854309684*^9, 3.628559883168714*^9}, {3.628560194440748*^9, 
+   3.628560206964603*^9}, {3.628560243729459*^9, 3.628560244648044*^9}, {
+   3.628560318831431*^9, 3.628560423235127*^9}, {3.6285957321232853`*^9, 
+   3.628595780779208*^9}, {3.628595956003388*^9, 3.628596013178196*^9}, {
+   3.628596402700801*^9, 3.62859659281733*^9}, {3.628596642924019*^9, 
+   3.628596705377207*^9}, {3.628596749696795*^9, 3.628596809232341*^9}, {
+   3.628596865265575*^9, 3.628596889254545*^9}, {3.628596927544145*^9, 
+   3.628596928169578*^9}, {3.628597083660187*^9, 3.6285971824596233`*^9}, {
+   3.62859749492194*^9, 3.628597498544982*^9}, {3.628597637462976*^9, 
+   3.6285977511043863`*^9}, {3.628597844510515*^9, 3.628597956404552*^9}, {
+   3.628598025710897*^9, 3.6285980659166613`*^9}, {3.628598117481881*^9, 
+   3.6285981198812017`*^9}, {3.628598209320857*^9, 3.628598220047674*^9}, {
+   3.628598262318281*^9, 3.628598272194746*^9}, {3.628598496754364*^9, 
+   3.628598591190263*^9}, {3.628598630277855*^9, 3.62859864394735*^9}, {
+   3.628598713445559*^9, 3.628598721216998*^9}, {3.628598786048065*^9, 
+   3.6285987959280252`*^9}, {3.628598832397192*^9, 3.628598858369122*^9}, {
+   3.628598910848634*^9, 3.628598932754415*^9}, {3.6285990628285513`*^9, 
+   3.628599100219255*^9}, {3.628599151466755*^9, 3.6285991528546667`*^9}, {
+   3.62859972263708*^9, 3.628599827472353*^9}, {3.628599908816244*^9, 
+   3.628599911471107*^9}, {3.628599964406913*^9, 3.628599967303801*^9}, {
+   3.628600018310025*^9, 3.628600023496817*^9}, {3.628600131241641*^9, 
+   3.628600140462893*^9}, 3.628600213687254*^9, {3.628600294494239*^9, 
+   3.628600324013219*^9}, {3.628600613266952*^9, 3.6286006393329973`*^9}, {
+   3.628600786465536*^9, 3.628600832148016*^9}, {3.628600995657299*^9, 
+   3.6286010185125227`*^9}, {3.6286010610869102`*^9, 3.628601062566203*^9}, {
+   3.628618329926723*^9, 3.628618354959551*^9}, {3.628618540997151*^9, 
+   3.628618561216675*^9}, {3.628618639612583*^9, 3.628618643360141*^9}, {
+   3.6286186941283493`*^9, 3.6286187235028877`*^9}, {3.6286188256306133`*^9, 
+   3.628618845082923*^9}, {3.6286429496188*^9, 3.628642969411581*^9}, {
+   3.628643030219817*^9, 3.628643061133768*^9}, {3.628643116586534*^9, 
+   3.628643119434512*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"str", "=", "\"\<Accident & Health Insurance\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"StringMatchQ", "[", 
+  RowBox[{"str", ",", "\"\<*Insurance*\>\""}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"str2", "=", "\"\<Oil & Gas Equipment & Services\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"StringMatchQ", "[", 
+  RowBox[{"str2", ",", "\"\<*Insurance*\>\""}], "]"}]}], "Input",
+ CellChangeTimes->{{3.6286184010737143`*^9, 3.628618524469183*^9}}],
+
+Cell[BoxData["True"], "Output",
+ CellChangeTimes->{
+  3.628618426767886*^9, {3.628618457520619*^9, 3.628618525331188*^9}, 
+   3.6286440458703136`*^9}],
+
+Cell[BoxData["False"], "Output",
+ CellChangeTimes->{
+  3.628618426767886*^9, {3.628618457520619*^9, 3.628618525331188*^9}, 
+   3.6286440458719807`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"grahamScreenData", "=", "getGrahamScreenData"}], ";"}]], "Input",
+ CellChangeTimes->{{3.62855952652731*^9, 3.628559529185697*^9}, {
+   3.6285596689143353`*^9, 3.6285596697860737`*^9}, 3.628560212709147*^9, {
+   3.628595802749217*^9, 3.628595808507617*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"Scraped data from yahoo screen\"\>"], "Print",
+ CellChangeTimes->{
+  3.628596554102972*^9, {3.628596893239335*^9, 3.628596898931114*^9}, {
+   3.62859700016114*^9, 3.6285970042873287`*^9}, 3.6285972013017073`*^9, 
+   3.62859750599769*^9, {3.628597795562244*^9, 3.628597816156789*^9}, 
+   3.628597963140387*^9, 3.628598038577774*^9, {3.6285981242494373`*^9, 
+   3.628598128290617*^9}, 3.628598192734191*^9, 3.628598223628501*^9, 
+   3.628598291012347*^9, 3.6285985409398127`*^9, {3.6285986057077827`*^9, 
+   3.628598609012792*^9}, 3.6285986566097307`*^9, {3.628598866329052*^9, 
+   3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
+   3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
+   3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058934783*^9}],
+
+Cell[BoxData["\<\"Dropped Index Mem (4), Return % (9), and Growth (18) \
+columns\"\>"], "Print",
+ CellChangeTimes->{
+  3.628596554102972*^9, {3.628596893239335*^9, 3.628596898931114*^9}, {
+   3.62859700016114*^9, 3.6285970042873287`*^9}, 3.6285972013017073`*^9, 
+   3.62859750599769*^9, {3.628597795562244*^9, 3.628597816156789*^9}, 
+   3.628597963140387*^9, 3.628598038577774*^9, {3.6285981242494373`*^9, 
+   3.628598128290617*^9}, 3.628598192734191*^9, 3.628598223628501*^9, 
+   3.628598291012347*^9, 3.6285985409398127`*^9, {3.6285986057077827`*^9, 
+   3.628598609012792*^9}, 3.6285986566097307`*^9, {3.628598866329052*^9, 
+   3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
+   3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
+   3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058935953*^9}],
+
+Cell[BoxData["\<\"Removed banks and insurance companies\"\>"], "Print",
+ CellChangeTimes->{
+  3.628596554102972*^9, {3.628596893239335*^9, 3.628596898931114*^9}, {
+   3.62859700016114*^9, 3.6285970042873287`*^9}, 3.6285972013017073`*^9, 
+   3.62859750599769*^9, {3.628597795562244*^9, 3.628597816156789*^9}, 
+   3.628597963140387*^9, 3.628598038577774*^9, {3.6285981242494373`*^9, 
+   3.628598128290617*^9}, 3.628598192734191*^9, 3.628598223628501*^9, 
+   3.628598291012347*^9, 3.6285985409398127`*^9, {3.6285986057077827`*^9, 
+   3.628598609012792*^9}, 3.6285986566097307`*^9, {3.628598866329052*^9, 
+   3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
+   3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
+   3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058936969*^9}],
+
+Cell[BoxData["\<\"Screen for >$500M sales\"\>"], "Print",
+ CellChangeTimes->{
+  3.628596554102972*^9, {3.628596893239335*^9, 3.628596898931114*^9}, {
+   3.62859700016114*^9, 3.6285970042873287`*^9}, 3.6285972013017073`*^9, 
+   3.62859750599769*^9, {3.628597795562244*^9, 3.628597816156789*^9}, 
+   3.628597963140387*^9, 3.628598038577774*^9, {3.6285981242494373`*^9, 
+   3.628598128290617*^9}, 3.628598192734191*^9, 3.628598223628501*^9, 
+   3.628598291012347*^9, 3.6285985409398127`*^9, {3.6285986057077827`*^9, 
+   3.628598609012792*^9}, 3.6285986566097307`*^9, {3.628598866329052*^9, 
+   3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
+   3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
+   3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
+   3.628601274031679*^9, 3.628618749404726*^9, 3.6286440589379883`*^9}],
+
+Cell[BoxData["\<\"Screen for positive 5-yr growth rate\"\>"], "Print",
+ CellChangeTimes->{
+  3.628596554102972*^9, {3.628596893239335*^9, 3.628596898931114*^9}, {
+   3.62859700016114*^9, 3.6285970042873287`*^9}, 3.6285972013017073`*^9, 
+   3.62859750599769*^9, {3.628597795562244*^9, 3.628597816156789*^9}, 
+   3.628597963140387*^9, 3.628598038577774*^9, {3.6285981242494373`*^9, 
+   3.628598128290617*^9}, 3.628598192734191*^9, 3.628598223628501*^9, 
+   3.628598291012347*^9, 3.6285985409398127`*^9, {3.6285986057077827`*^9, 
+   3.628598609012792*^9}, 3.6285986566097307`*^9, {3.628598866329052*^9, 
+   3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
+   3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
+   3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
+   3.628601274031679*^9, 3.628618749404726*^9, 3.6286440589391327`*^9}],
+
+Cell[BoxData["\<\"Screening for >500k average volume\"\>"], "Print",
+ CellChangeTimes->{
+  3.628596554102972*^9, {3.628596893239335*^9, 3.628596898931114*^9}, {
+   3.62859700016114*^9, 3.6285970042873287`*^9}, 3.6285972013017073`*^9, 
+   3.62859750599769*^9, {3.628597795562244*^9, 3.628597816156789*^9}, 
+   3.628597963140387*^9, 3.628598038577774*^9, {3.6285981242494373`*^9, 
+   3.628598128290617*^9}, 3.628598192734191*^9, 3.628598223628501*^9, 
+   3.628598291012347*^9, 3.6285985409398127`*^9, {3.6285986057077827`*^9, 
+   3.628598609012792*^9}, 3.6285986566097307`*^9, {3.628598866329052*^9, 
+   3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
+   3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
+   3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058940185*^9}],
+
+Cell[BoxData["\<\"Appending Graham Numbers and screening for positive \
+values\"\>"], "Print",
+ CellChangeTimes->{
+  3.628596554102972*^9, {3.628596893239335*^9, 3.628596898931114*^9}, {
+   3.62859700016114*^9, 3.6285970042873287`*^9}, 3.6285972013017073`*^9, 
+   3.62859750599769*^9, {3.628597795562244*^9, 3.628597816156789*^9}, 
+   3.628597963140387*^9, 3.628598038577774*^9, {3.6285981242494373`*^9, 
+   3.628598128290617*^9}, 3.628598192734191*^9, 3.628598223628501*^9, 
+   3.628598291012347*^9, 3.6285985409398127`*^9, {3.6285986057077827`*^9, 
+   3.628598609012792*^9}, 3.6285986566097307`*^9, {3.628598866329052*^9, 
+   3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
+   3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
+   3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644068987648*^9}],
+
+Cell[BoxData["\<\"Screen for stocks with uninterrupted Longterm (20 years) \
+Dividends\"\>"], "Print",
+ CellChangeTimes->{
+  3.628596554102972*^9, {3.628596893239335*^9, 3.628596898931114*^9}, {
+   3.62859700016114*^9, 3.6285970042873287`*^9}, 3.6285972013017073`*^9, 
+   3.62859750599769*^9, {3.628597795562244*^9, 3.628597816156789*^9}, 
+   3.628597963140387*^9, 3.628598038577774*^9, {3.6285981242494373`*^9, 
+   3.628598128290617*^9}, 3.628598192734191*^9, 3.628598223628501*^9, 
+   3.628598291012347*^9, 3.6285985409398127`*^9, {3.6285986057077827`*^9, 
+   3.628598609012792*^9}, 3.6285986566097307`*^9, {3.628598866329052*^9, 
+   3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
+   3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
+   3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
+   3.628601274031679*^9, 3.628618749404726*^9, 3.6286440921980257`*^9}],
+
+Cell[BoxData["\<\"Appending GN/P and sorting in descending order\"\>"], \
+"Print",
+ CellChangeTimes->{
+  3.628596554102972*^9, {3.628596893239335*^9, 3.628596898931114*^9}, {
+   3.62859700016114*^9, 3.6285970042873287`*^9}, 3.6285972013017073`*^9, 
+   3.62859750599769*^9, {3.628597795562244*^9, 3.628597816156789*^9}, 
+   3.628597963140387*^9, 3.628598038577774*^9, {3.6285981242494373`*^9, 
+   3.628598128290617*^9}, 3.628598192734191*^9, 3.628598223628501*^9, 
+   3.628598291012347*^9, 3.6285985409398127`*^9, {3.6285986057077827`*^9, 
+   3.628598609012792*^9}, 3.6285986566097307`*^9, {3.628598866329052*^9, 
+   3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
+   3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
+   3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
+   3.628601274031679*^9, 3.628618749404726*^9, 3.6286441004381037`*^9}],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"The screen resulted in \"\>", "\[InvisibleSpace]", "18", 
+   "\[InvisibleSpace]", "\<\" stocks.\"\>"}],
+  SequenceForm["The screen resulted in ", 18, " stocks."],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.628596554102972*^9, {3.628596893239335*^9, 3.628596898931114*^9}, {
+   3.62859700016114*^9, 3.6285970042873287`*^9}, 3.6285972013017073`*^9, 
+   3.62859750599769*^9, {3.628597795562244*^9, 3.628597816156789*^9}, 
+   3.628597963140387*^9, 3.628598038577774*^9, {3.6285981242494373`*^9, 
+   3.628598128290617*^9}, 3.628598192734191*^9, 3.628598223628501*^9, 
+   3.628598291012347*^9, 3.6285985409398127`*^9, {3.6285986057077827`*^9, 
+   3.628598609012792*^9}, 3.6285986566097307`*^9, {3.628598866329052*^9, 
+   3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
+   3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
+   3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644100439642*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{"grahamScreenData", ",", 
+   RowBox[{"TableHeadings", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"Automatic", ",", "Automatic"}], "}"}]}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.628559685354694*^9, 3.628559687977438*^9}, {
+  3.6285958233949423`*^9, 3.628595924062778*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  TagBox[GridBox[{
+     {
+      StyleBox["\[Null]",
+       ShowStringCharacters->False], "1", "2", "3", "4", "5", "6", "7", "8", 
+      "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"},
+     {"1", "\<\"Symbol\"\>", "\<\"Company\"\>", "\<\"Industry\"\>", \
+"\<\"Price\"\>", "\<\"Avg. Vol\"\>", "\<\"Market Cap\"\>", "\<\"Div/Yld (%)\"\
+\>", "\<\"Beta\"\>", "\<\"Sales\"\>", "\<\"Profit Margin\"\>", "\<\"P / \
+E\"\>", "\<\"Price/Book\"\>", "\<\"Price/Sales\"\>", "\<\"PEG\"\>", "\<\"5-yr \
+Growth (%)\"\>", "\<\"Avg. Rec\"\>", "\<\"Graham Number\"\>", \
+"\<\"Uninterrupted Longterm Dividend\"\>", "\<\"GN/P\"\>"},
+     {"2", "\<\"CSH\"\>", "\<\"Cash America International, Inc\"\>", \
+"\<\"Credit Services\"\>", "21.07`", "543803", "6.0866`*^8", "0.7`", 
+      "0.58`", "\<\"$1.90B\"\>", "\<\"5.5%\"\>", "5.96`", "0.5`", "0.3`", 
+      "0.36`", "3.657`", "2.9`", "55.70805327778022`", "True", 
+      "2.6439512708960713`"},
+     {"3", "\<\"HES\"\>", "\<\"Hess Corporation Common Stock\"\>", \
+"\<\"Independent Oil & Gas\"\>", "67.86`", "4132760", "2.041`*^10", "1.5`", 
+      "1.8`", "\<\"$21.39B\"\>", "\<\"19.9%\"\>", "5.08`", "0.8`", "1.`", 
+      "2.14`", "2.586`", "2.3`", "155.73012512035044`", "True", 
+      "2.2948736386730095`"},
+     {"4", "\<\"TDW\"\>", "\<\"Tidewater Inc. Common Stock\"\>", "\<\"Oil & \
+Gas Equipment & Services\"\>", "29.68`", "1123470", "1.47`*^9", "3.4`", 
+      "1.97`", "\<\"$1.52B\"\>", "\<\"10.6%\"\>", "9.22`", "0.5`", "1.`", 
+      "1.5`", "5.076`", "2.7`", "63.63490345321504`", "True", 
+      "2.14403313521614`"},
+     {"5", "\<\"SM\"\>", "\<\"SM Energy Company Common Stock\"\>", \
+"\<\"Independent Oil & Gas\"\>", "30.29`", "1820910", "2.04`*^9", "0.3`", 
+      "1.43`", "\<\"$2.53B\"\>", "\<\"13.5%\"\>", "6.05`", "1.`", "0.8`", 
+      "0.32`", "40.288`", "2", "57.103691474369676`", "True", 
+      "1.8852324686157043`"},
+     {"6", "\<\"MRO\"\>", "\<\"Marathon Oil Corporation Common\"\>", \
+"\<\"Independent Oil & Gas\"\>", "26.25`", "8225260", "1.772`*^10", "3.2`", 
+      "1.37`", "\<\"$14.14B\"\>", "\<\"17.6%\"\>", "7.26`", "0.9`", "1.3`", 
+      "1.09`", "1.073`", "2.1`", "49.35431561677256`", "True", 
+      "1.8801644044484787`"},
+     {"7", "\<\"VLO\"\>", "\<\"Valero Energy Corporation Commo\"\>", "\<\"Oil \
+& Gas Refining & Marketing\"\>", "46.81`", "7783740", "2.44`*^10", "2.4`", 
+      "2.03`", "\<\"$137.41B\"\>", "\<\"2.7%\"\>", "6.66`", "1.2`", "0.2`", 
+      "0.42`", "31.063`", "2.1`", "78.81551603269499`", "True", 
+      "1.6837324510295875`"},
+     {"8", "\<\"TRN\"\>", "\<\"Trinity Industries, Inc. Common\"\>", \
+"\<\"Railroads\"\>", "27.86`", "4333340", "4.34`*^9", "1.4`", 
+      "1.23`", "\<\"$5.76B\"\>", "\<\"11.3%\"\>", "6.86`", "1.5`", "0.8`", 
+      "0.67`", "75.154`", "1.7`", "41.28845761832234`", "True", 
+      "1.4819977608873776`"},
+     {"9", "\<\"TOT\"\>", "\<\"Total S.A.\"\>", "\<\"Major Integrated Oil & \
+Gas\"\>", "51.22`", "1776400", "1.1653`*^11", "5.`", 
+      "1.11`", "\<\"$212.72B\"\>", "\<\"5.4%\"\>", "10.07`", "1.2`", "0.5`", 
+      "2.21`", "0.697`", "2.1`", "71.07206476527891`", "True", 
+      "1.387584239853161`"},
+     {"10", "\<\"COP\"\>", "\<\"ConocoPhillips Common Stock\"\>", \
+"\<\"Independent Oil & Gas\"\>", "63.61`", "8966150", "7.83`*^10", "4.6`", 
+      "0.77`", "\<\"$57.46B\"\>", "\<\"16.4%\"\>", "8.44`", "1.4`", "1.4`", 
+      "1.29`", "1.02`", "2.1`", "87.27613011299252`", "True", 
+      "1.372050465539892`"},
+     {"11", "\<\"YPF\"\>", "\<\"YPF Sociedad Anonima Common Sto\"\>", \
+"\<\"Major Integrated Oil & Gas\"\>", "26.81`", "1999700", "1.051`*^10", 
+      "1.1`", "2.31`", "\<\"$15.13B\"\>", "\<\"7.4%\"\>", "9.44`", "1.3`", 
+      "0.7`", "0.1`", "1.369`", "2.6`", "36.564733008733974`", "True", 
+      "1.3638468112172313`"},
+     {"12", "\<\"CVX\"\>", "\<\"Chevron Corporation Common Stoc\"\>", \
+"\<\"Major Integrated Oil & Gas\"\>", "104.91`", "8664800", "1.9832`*^11", 
+      "4.1`", "1.11`", "\<\"$204.02B\"\>", "\<\"10.1%\"\>", "9.66`", "1.3`", 
+      "1.`", "2.01`", "6.817`", "2.4`", "142.04405333381612`", "True", 
+      "1.3539610459805178`"},
+     {"13", "\<\"HP\"\>", "\<\"Helmerich & Payne, Inc. Common\"\>", "\<\"Oil \
+& Gas Drilling & Exploration\"\>", "61.67`", "2070650", "6.68`*^9", "4.4`", 
+      "0.79`", "\<\"$3.72B\"\>", "\<\"19.1%\"\>", "9.55`", "1.4`", "1.8`", 
+      "10.03`", "25.623`", "2.4`", "81.0203641068096`", "True", 
+      "1.3137727275305593`"},
+     {"14", "\<\"MUR\"\>", "\<\"Murphy Oil Corporation Common S\"\>", \
+"\<\"Independent Oil & Gas\"\>", "45.66`", "1959310", "8.1`*^9", "3.1`", 
+      "1.3`", "\<\"$5.40B\"\>", "\<\"11.2%\"\>", "13.72`", "1.`", "1.5`", 
+      "1.87`", "2.808`", "2.8`", "59.52880976888417`", "True", 
+      "1.3037409060202403`"},
+     {"15", "\<\"OXY\"\>", "\<\"Occidental Petroleum Corporatio\"\>", \
+"\<\"Independent Oil & Gas\"\>", "75.08`", "6665260", "5.822`*^10", "3.8`", 
+      "1.56`", "\<\"$24.53B\"\>", "\<\"23.1%\"\>", "10.47`", "1.3`", "2.4`", 
+      "2.94`", "5.425`", "2.2`", "95.10201090145254`", "True", 
+      "1.2666756912819996`"},
+     {"16", "\<\"RS\"\>", "\<\"Reliance Steel & Aluminum Co. C\"\>", \
+"\<\"Steel & Iron\"\>", "60.29`", "669916", "4.71`*^9", "2.3`", 
+      "1.31`", "\<\"$10.18B\"\>", "\<\"3.3%\"\>", "13.88`", "1.1`", "0.5`", 
+      "1.29`", "13.173`", "2", "71.72412021070737`", "True", 
+      "1.1896520187544761`"},
+     {"17", "\<\"MS\"\>", "\<\"Morgan Stanley Common Stock\"\>", \
+"\<\"Investment Brokerage - National\"\>", "37.4`", "9741420", "7.321`*^10", 
+      "1.1`", "2.31`", "\<\"$34.15B\"\>", "\<\"15.2%\"\>", "14.94`", "1.1`", 
+      "2.1`", "0.6`", "9.213`", "2.5`", "43.86997150671516`", "True", 
+      "1.1729938905538813`"},
+     {"18", "\<\"HFC\"\>", "\<\"HollyFrontier Corporation Commo\"\>", \
+"\<\"Oil & Gas Refining & Marketing\"\>", "37.79`", "2415700", "7.39`*^9", 
+      "3.4`", "1.49`", "\<\"$20.31B\"\>", "\<\"2.8%\"\>", "13.34`", "1.2`", 
+      "0.4`", "1.3`", "16.908`", "2.5`", "44.119367175878665`", "True", 
+      "1.167487885045744`"},
+     {"19", "\<\"MDU\"\>", "\<\"MDU Resources Group, Inc. Commo\"\>", \
+"\<\"Diversified Utilities\"\>", "22.62`", "1159610", "4.39`*^9", "3.2`", 
+      "0.75`", "\<\"$4.69B\"\>", "\<\"6.5%\"\>", "14.22`", "1.4`", "0.9`", 
+      "2.99`", "2.246`", "2.8`", "23.793643321273855`", "True", 
+      "1.051885204300347`"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxDividers->{
+     "Columns" -> {False, True, {False}, False}, "ColumnsIndexed" -> {}, 
+      "Rows" -> {False, True, {False}, False}, "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[2.0999999999999996`]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}],
+   {OutputFormsDump`HeadedRows, OutputFormsDump`HeadedColumns}],
+  Function[BoxForm`e$, 
+   TableForm[BoxForm`e$, TableHeadings -> {Automatic, Automatic}]]]], "Output",\
+
+ CellChangeTimes->{
+  3.628596051381391*^9, 3.6285965970374193`*^9, 3.628597029252096*^9, 
+   3.628597254453195*^9, 3.628597536213347*^9, {3.628597810345536*^9, 
+   3.628597819425378*^9}, 3.628597980947076*^9, 3.628598146426106*^9, 
+   3.628598226720244*^9, 3.628598293679597*^9, 3.628598543342038*^9, 
+   3.6285986121792593`*^9, 3.6285986781589622`*^9, 3.62859889458294*^9, 
+   3.628598989373424*^9, 3.628599855934885*^9, 3.628600167305828*^9, 
+   3.628600407528081*^9, 3.628600909446323*^9, 3.6286011580275307`*^9, 
+   3.628601349215302*^9, 3.628618795620171*^9, 3.628644100580167*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"generateGrahamScreenTable", "[", 
+   RowBox[{"grahamScreenData_", ",", "i_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"headingTextOptions", "=", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"FontFamily", "->", "\"\<Times\>\""}], ",", 
+        RowBox[{"FontSize", "\[Rule]", "12"}], ",", 
+        RowBox[{"FontWeight", "\[Rule]", "\"\<Bold\>\""}]}], "}"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"normalTextOptions", "=", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"FontFamily", "->", "\"\<Times\>\""}], ",", 
+        RowBox[{"FontSize", "\[Rule]", "12"}], ",", 
+        RowBox[{"FontWeight", "\[Rule]", "\"\<Normal\>\""}]}], "}"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Grid", "[", 
+      RowBox[{
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"Text", "[", 
+            RowBox[{
+             RowBox[{"grahamScreenData", "[", 
+              RowBox[{"[", 
+               RowBox[{"1", ",", "j"}], "]"}], "]"}], ",", 
+             RowBox[{"BaseStyle", "\[Rule]", "headingTextOptions"}]}], "]"}], 
+           ",", 
+           RowBox[{"Text", "[", 
+            RowBox[{
+             RowBox[{"grahamScreenData", "[", 
+              RowBox[{"[", 
+               RowBox[{"i", ",", "j"}], "]"}], "]"}], ",", 
+             RowBox[{"BaseStyle", "\[Rule]", "normalTextOptions"}]}], "]"}]}],
+           "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"j", ",", 
+           RowBox[{"{", 
+            RowBox[{
+            "1", ",", "2", ",", "3", ",", "4", ",", "7", ",", "11", ",", "12",
+              ",", "13", ",", "15", ",", "16", ",", "19"}], "}"}]}], "}"}]}], 
+        "]"}], ",", 
+       RowBox[{"Frame", "\[Rule]", "All"}], ",", 
+       RowBox[{"Alignment", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{"{", 
+          RowBox[{"Right", ",", "Left"}], "}"}], "}"}]}]}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.628612629661778*^9, 3.6286127696894503`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"TableForm", "[", 
+  RowBox[{"grahamScreenData", "[", 
+   RowBox[{"[", 
+    RowBox[{"All", ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "2", ",", "3", ",", "4", ",", "7", ",", "11", ",", "12", ",", 
+       "13", ",", "15", ",", "16", ",", "19"}], "}"}]}], "]"}], "]"}], 
+  "]"}]], "Input",
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGCQBGIQ3XI4KUSS47VjnjhbKIiOeDAtFUTfkVuWDaJ/r7u8
+ACw/yXMZiM6wWnoIRB9I23IWRPtscb4EogXCL14F0dsWfbgLorVk9jwA0Ytc
+VrwH0Qb18p9A9JVftd9B9FNX/h9g+ZRH+lJA2sj+pj2Iri9vdAXRvT0X3EC0
+xYS+QBB9ungKmJ7FujsCRE9i3hsNos/0h1eB6Ge7/nSB6BhhnX4QzXy3Akyn
+FW+ZAqJXb/KeAaIlup7PBdG/CvXmgWirjh8HQbRq+tILINp3j0e+NJCeWK9b
+AaJX7KqsBdFv8s41gOgz2ov6QfSBi7JTQbSJCOMmEL2RIxdMSzOF7wDRxV4l
+u0C0zz8LHRmQfKewPoj281e5vANI29RYgOmQrfpTGDmB4Zd6ZR6IBgA+5KkL
+
+  "]],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"Symbol\"\>", "\<\"Company\"\>", "\<\"Industry\"\>", \
+"\<\"Price\"\>", "\<\"Div/Yld (%)\"\>", "\<\"P / E\"\>", \
+"\<\"Price/Book\"\>", "\<\"Price/Sales\"\>", "\<\"5-yr Growth (%)\"\>", \
+"\<\"Avg. Rec\"\>", "\<\"GN/P\"\>"},
+    {"\<\"CSH\"\>", "\<\"Cash America International, Inc\"\>", "\<\"Credit \
+Services\"\>", "21.07`", "0.7`", "5.96`", "0.5`", "0.3`", "3.657`", "2.9`", 
+     "2.6439512708960713`"},
+    {"\<\"HES\"\>", "\<\"Hess Corporation Common Stock\"\>", "\<\"Independent \
+Oil & Gas\"\>", "67.86`", "1.5`", "5.08`", "0.8`", "1.`", "2.586`", "2.3`", 
+     "2.2948736386730095`"},
+    {"\<\"TDW\"\>", "\<\"Tidewater Inc. Common Stock\"\>", "\<\"Oil & Gas \
+Equipment & Services\"\>", "29.68`", "3.4`", "9.22`", "0.5`", "1.`", "5.076`",
+      "2.7`", "2.14403313521614`"},
+    {"\<\"SM\"\>", "\<\"SM Energy Company Common Stock\"\>", "\<\"Independent \
+Oil & Gas\"\>", "30.29`", "0.3`", "6.05`", "1.`", "0.8`", "40.288`", "2", 
+     "1.8852324686157043`"},
+    {"\<\"MRO\"\>", "\<\"Marathon Oil Corporation Common\"\>", \
+"\<\"Independent Oil & Gas\"\>", "26.25`", "3.2`", "7.26`", "0.9`", "1.3`", 
+     "1.073`", "2.1`", "1.8801644044484787`"},
+    {"\<\"VLO\"\>", "\<\"Valero Energy Corporation Commo\"\>", "\<\"Oil & Gas \
+Refining & Marketing\"\>", "46.81`", "2.4`", "6.66`", "1.2`", "0.2`", 
+     "31.063`", "2.1`", "1.6837324510295875`"},
+    {"\<\"TRN\"\>", "\<\"Trinity Industries, Inc. Common\"\>", "\<\"Railroads\
+\"\>", "27.86`", "1.4`", "6.86`", "1.5`", "0.8`", "75.154`", "1.7`", 
+     "1.4819977608873776`"},
+    {"\<\"TOT\"\>", "\<\"Total S.A.\"\>", "\<\"Major Integrated Oil & \
+Gas\"\>", "51.22`", "5.`", "10.07`", "1.2`", "0.5`", "0.697`", "2.1`", 
+     "1.387584239853161`"},
+    {"\<\"COP\"\>", "\<\"ConocoPhillips Common Stock\"\>", "\<\"Independent \
+Oil & Gas\"\>", "63.61`", "4.6`", "8.44`", "1.4`", "1.4`", "1.02`", "2.1`", 
+     "1.372050465539892`"},
+    {"\<\"YPF\"\>", "\<\"YPF Sociedad Anonima Common Sto\"\>", "\<\"Major \
+Integrated Oil & Gas\"\>", "26.81`", "1.1`", "9.44`", "1.3`", "0.7`", 
+     "1.369`", "2.6`", "1.3638468112172313`"},
+    {"\<\"CVX\"\>", "\<\"Chevron Corporation Common Stoc\"\>", "\<\"Major \
+Integrated Oil & Gas\"\>", "104.91`", "4.1`", "9.66`", "1.3`", "1.`", 
+     "6.817`", "2.4`", "1.3539610459805178`"},
+    {"\<\"HP\"\>", "\<\"Helmerich & Payne, Inc. Common\"\>", "\<\"Oil & Gas \
+Drilling & Exploration\"\>", "61.67`", "4.4`", "9.55`", "1.4`", "1.8`", 
+     "25.623`", "2.4`", "1.3137727275305593`"},
+    {"\<\"MUR\"\>", "\<\"Murphy Oil Corporation Common S\"\>", \
+"\<\"Independent Oil & Gas\"\>", "45.66`", "3.1`", "13.72`", "1.`", "1.5`", 
+     "2.808`", "2.8`", "1.3037409060202403`"},
+    {"\<\"OXY\"\>", "\<\"Occidental Petroleum Corporatio\"\>", \
+"\<\"Independent Oil & Gas\"\>", "75.08`", "3.8`", "10.47`", "1.3`", "2.4`", 
+     "5.425`", "2.2`", "1.2666756912819996`"},
+    {"\<\"RS\"\>", "\<\"Reliance Steel & Aluminum Co. C\"\>", "\<\"Steel & \
+Iron\"\>", "60.29`", "2.3`", "13.88`", "1.1`", "0.5`", "13.173`", "2", 
+     "1.1896520187544761`"},
+    {"\<\"MS\"\>", "\<\"Morgan Stanley Common Stock\"\>", "\<\"Investment \
+Brokerage - National\"\>", "37.4`", "1.1`", "14.94`", "1.1`", "2.1`", 
+     "9.213`", "2.5`", "1.1729938905538813`"},
+    {"\<\"HFC\"\>", "\<\"HollyFrontier Corporation Commo\"\>", "\<\"Oil & Gas \
+Refining & Marketing\"\>", "37.79`", "3.4`", "13.34`", "1.2`", "0.4`", 
+     "16.908`", "2.5`", "1.167487885045744`"},
+    {"\<\"MDU\"\>", "\<\"MDU Resources Group, Inc. Commo\"\>", \
+"\<\"Diversified Utilities\"\>", "22.62`", "3.2`", "14.22`", "1.4`", "0.9`", 
+     "2.246`", "2.8`", "1.051885204300347`"}
+   },
+   GridBoxAlignment->{
+    "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+     "RowsIndexed" -> {}},
+   GridBoxSpacings->{"Columns" -> {
+       Offset[0.27999999999999997`], {
+        Offset[2.0999999999999996`]}, 
+       Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+       Offset[0.2], {
+        Offset[0.4]}, 
+       Offset[0.2]}, "RowsIndexed" -> {}}],
+  Function[BoxForm`e$, 
+   TableForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.6284514665662327`*^9, 3.628451482399354*^9}, 
+   3.6284515855028057`*^9, 3.6284516916997423`*^9, 3.6284517481059103`*^9, 
+   3.6284653092383537`*^9, 3.628465369195187*^9, 3.628465610734626*^9, 
+   3.628466838063315*^9, 3.628466901257351*^9, {3.62846728217389*^9, 
+   3.6284672989550953`*^9}, 3.628467424795045*^9, 3.628469022484132*^9, 
+   3.628554226631208*^9, 3.628556155576354*^9, 3.628556835804003*^9, 
+   3.628558937296988*^9, 3.6286005689353037`*^9, 3.628600909600608*^9, 
+   3.628601158105946*^9, 3.6286013492676477`*^9, 3.628607523616741*^9, 
+   3.62864410066006*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"insertTradingChart", "[", 
+   RowBox[{"texfile_", ",", "ticker_", ",", "company_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"plot", "=", 
+      RowBox[{"TradingChart", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"ticker", ",", 
+          RowBox[{"DatePlus", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"-", "6"}], ",", "\"\<Month\>\""}], "}"}], "]"}]}], 
+         "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<Volume\>\"", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<SimpleMovingAverage\>\"", ",", "200"}], "}"}]}], 
+         "}"}], ",", 
+        RowBox[{"ImageSize", "\[Rule]", "350"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"filename", " ", "=", " ", 
+      RowBox[{"generateFilename", "[", 
+       RowBox[{
+        RowBox[{"StringJoin", "[", 
+         RowBox[{"ticker", ",", "\"\<-tradingchart\>\""}], "]"}], ",", 
+        "\"\<plots\>\"", ",", "\"\<eps\>\""}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Export", "[", 
+      RowBox[{"filename", ",", " ", "plot"}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"insertTradingChartInTexfile", "[", 
+      RowBox[{"texfile", ",", "filename", ",", "ticker", ",", "company"}], 
+      "]"}], ";"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.6281416128838253`*^9, 3.6281416323901577`*^9}, 
+   3.628558009188635*^9, {3.628558433402691*^9, 3.628558489180421*^9}, {
+   3.62855853160287*^9, 3.628558603230294*^9}, {3.628558634508952*^9, 
+   3.628558654972228*^9}, {3.6285587187538633`*^9, 3.628558729016428*^9}, {
+   3.6285588543487597`*^9, 3.628558854692594*^9}, {3.6286136357669477`*^9, 
+   3.628613647118449*^9}, {3.628615992522793*^9, 3.628615994962266*^9}, {
+   3.6286160342181377`*^9, 3.628616034704535*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"insertTradingChartInTexfile", "[", 
+   RowBox[{"texfile_", ",", "filename_", ",", "ticker_", ",", "company_"}], 
+   "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"WriteString", "[", 
+      RowBox[{"texfile", ",", "\"\<\\n\\\\begin{figure}[!htb]\\n\>\""}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"WriteString", "[", 
+      RowBox[{"texfile", ",", "\"\<\\\\centering\\n\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"WriteString", "[", 
+      RowBox[{"texfile", ",", 
+       RowBox[{"StringJoin", "[", 
+        RowBox[{
+        "\"\<\\\\includegraphics{\>\"", ",", "filename", ",", 
+         "\"\<}\\n\>\""}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"WriteString", "[", 
+      RowBox[{"texfile", ",", 
+       RowBox[{"StringJoin", "[", 
+        RowBox[{"\"\<\\\\caption{\>\"", ",", 
+         RowBox[{"StringReplace", "[", 
+          RowBox[{"company", ",", "latexreplacements"}], "]"}], ",", 
+         "\"\< (\>\"", ",", "ticker", ",", "\"\<)}\\n\>\""}], "]"}]}], "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"WriteString", "[", 
+      RowBox[{"texfile", ",", 
+       RowBox[{"StringJoin", "[", 
+        RowBox[{
+        "\"\<\\\\label{fig:\>\"", ",", "ticker", ",", 
+         "\"\<-tradingchart}\\n\>\""}], "]"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"WriteString", "[", 
+      RowBox[{"texfile", ",", "\"\<\\\\end{figure}\\n\\n\>\""}], "]"}], 
+     ";"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.628558671938098*^9, 3.628558711555266*^9}, {
+   3.628558756825625*^9, 3.62855881442302*^9}, 3.628558884356435*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"insertGeneratedTableInTexfile", "[", 
+   RowBox[{"texfile_", ",", "filename_", ",", "caption_", ",", "label_"}], 
+   "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"WriteString", "[", 
+      RowBox[{"texfile", ",", "\"\<\\n\\\\begin{table}[!htb]\\n\>\""}], "]"}],
+      ";", "\[IndentingNewLine]", 
+     RowBox[{"WriteString", "[", 
+      RowBox[{"texfile", ",", "\"\<\\\\centering\\n\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"WriteString", "[", 
+      RowBox[{"texfile", ",", 
+       RowBox[{"StringJoin", "[", 
+        RowBox[{"\"\<\\\\caption{\>\"", ",", "caption", ",", "\"\<}\\n\>\""}],
+         "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"WriteString", "[", 
+      RowBox[{"texfile", ",", 
+       RowBox[{"StringJoin", "[", 
+        RowBox[{
+        "\"\<\\\\includegraphics{\>\"", ",", "filename", ",", 
+         "\"\<}\\n\>\""}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"WriteString", "[", 
+      RowBox[{"texfile", ",", 
+       RowBox[{"StringJoin", "[", 
+        RowBox[{"\"\<\\\\label{fig:\>\"", ",", "label", ",", "\"\<}\\n\>\""}],
+         "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"WriteString", "[", 
+      RowBox[{"texfile", ",", "\"\<\\\\end{table}\\n\\n\>\""}], "]"}], 
+     ";"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.6286137390189047`*^9, 3.628613801400566*^9}, {
+  3.6286142561296387`*^9, 3.628614278931822*^9}, {3.628614350405424*^9, 
+  3.628614362107403*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"insertGrahamScreenTable", "[", 
+   RowBox[{"texfile_", ",", "grahamScreenData_", ",", "i_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"table", "=", 
+      RowBox[{"generateGrahamScreenTable", "[", 
+       RowBox[{"grahamScreenData", ",", "i"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"ticker", "=", 
+      RowBox[{"grahamScreenData", "[", 
+       RowBox[{"[", 
+        RowBox[{"i", ",", "1"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"label", "=", 
+      RowBox[{"StringJoin", "[", 
+       RowBox[{"ticker", ",", "\"\<-screendata\>\""}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"filename", " ", "=", " ", 
+      RowBox[{"generateFilename", "[", 
+       RowBox[{
+        RowBox[{"StringJoin", "[", 
+         RowBox[{"ticker", ",", "\"\<-screendata\>\""}], "]"}], ",", 
+        "\"\<tables\>\"", ",", "\"\<eps\>\""}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Export", "[", 
+      RowBox[{"filename", ",", "table"}], "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"insertGeneratedTableInTexfile", "[", 
+      RowBox[{"texfile", ",", "filename", ",", 
+       RowBox[{"StringJoin", "[", 
+        RowBox[{"ticker", ",", "\"\< data from Graham Screen\>\""}], "]"}], 
+       ",", "label"}], "]"}], ";"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.628612819000874*^9, 3.628612944384987*^9}, {
+   3.6286131694088917`*^9, 3.6286131700557213`*^9}, {3.628613240764658*^9, 
+   3.628613259998042*^9}, 3.628613620623623*^9, {3.6286136549490633`*^9, 
+   3.628613678056571*^9}, {3.628613812712399*^9, 3.628614020338705*^9}, {
+   3.628614263718585*^9, 3.628614266883418*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"texfile", "=", 
+    RowBox[{"OpenWrite", "[", 
+     RowBox[{"generateFilename", "[", 
+      RowBox[{"\"\<graham\>\"", ",", "\"\<reports\>\"", ",", "\"\<tex\>\""}], 
+      "]"}], "]"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"writeTexfileHeader", "[", "texfile", "]"}], ";"}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"WriteString", "[", 
+     RowBox[{"texfile", ",", "\"\<\\\\begin{math}\\n\>\""}], "]"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"Write", "[", 
+     RowBox[{"texfile", ",", 
+      RowBox[{"TeXForm", "[", 
+       RowBox[{"processeddata", "[", 
+        RowBox[{"[", 
+         RowBox[{"All", ",", "columns"}], "]"}], "]"}], "]"}]}], "]"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"WriteString", "[", 
+     RowBox[{"texfile", ",", "\"\<\\\\end{math}\\n\\n\>\""}], "]"}], ";"}], 
+   "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"grahamScreenData", "=", "getGrahamScreenData"}], ";"}], "*)"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Do", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ticker", "=", 
+      RowBox[{"grahamScreenData", "[", 
+       RowBox[{"[", 
+        RowBox[{"i", ",", "1"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"company", "=", 
+      RowBox[{"grahamScreenData", "[", 
+       RowBox[{"[", 
+        RowBox[{"i", ",", "2"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"fundamentalScreen", "=", 
+      RowBox[{"fundamentalsTable", "[", 
+       RowBox[{"ticker", ",", "texfile"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"fundamentalScreen", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], ">", "1.3"}], "&&", 
+        RowBox[{
+         RowBox[{"fundamentalScreen", "[", 
+          RowBox[{"[", "2", "]"}], "]"}], ">", "1.0"}]}], ",", 
+       "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"insertTradingChart", "[", 
+          RowBox[{"texfile", ",", "ticker", ",", "company"}], "]"}], ";", 
+         "\[IndentingNewLine]", "\[IndentingNewLine]", 
+         RowBox[{"insertGrahamScreenTable", "[", 
+          RowBox[{"texfile", ",", "grahamScreenData", ",", "i"}], "]"}], ";", 
+         "\[IndentingNewLine]", "\[IndentingNewLine]", 
+         RowBox[{"WriteString", "[", 
+          RowBox[{"texfile", ",", "\"\<\\\\clearpage\\n\>\""}], "]"}]}], 
+        "\[IndentingNewLine]", ")"}]}], "]"}]}], ",", "\[IndentingNewLine]", 
+    RowBox[{"(*", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "2", ",", "4"}], "}"}], "*)"}], "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{"i", ",", "2", ",", 
+      RowBox[{"Length", "[", "grahamScreenData", "]"}]}], "}"}]}], 
+   "\[IndentingNewLine]", "]"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"WriteString", "[", 
+   RowBox[{"texfile", ",", "\"\<\\n\\\\end{document}\>\""}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Close", "[", "texfile", "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.628131686039855*^9, 3.628131717917502*^9}, {
+   3.628131750246262*^9, 3.628131769565359*^9}, {3.628131804175085*^9, 
+   3.628131928797235*^9}, {3.628132126678392*^9, 3.6281321983223057`*^9}, {
+   3.628132329639401*^9, 3.6281324315829487`*^9}, {3.628132474566183*^9, 
+   3.628132474989012*^9}, 3.628132612272119*^9, {3.628134194776565*^9, 
+   3.628134210362484*^9}, {3.628134259672081*^9, 3.628134343442582*^9}, {
+   3.6281343777753*^9, 3.628134419343886*^9}, {3.628134514789249*^9, 
+   3.628134515342258*^9}, {3.6281345634778976`*^9, 3.628134623851056*^9}, {
+   3.628135391377201*^9, 3.6281354150821257`*^9}, {3.628136302837961*^9, 
+   3.6281364274287777`*^9}, {3.628136550067978*^9, 3.6281365621137533`*^9}, {
+   3.62813659674715*^9, 3.628136707636133*^9}, {3.628136816256084*^9, 
+   3.628137174071145*^9}, {3.628137482149783*^9, 3.62813752234445*^9}, {
+   3.628137593013322*^9, 3.6281375941637373`*^9}, {3.6281377074457693`*^9, 
+   3.628137721358082*^9}, {3.628137769997879*^9, 3.62813777238101*^9}, {
+   3.628137812074148*^9, 3.6281378228118057`*^9}, {3.628137924351157*^9, 
+   3.628137934102038*^9}, 3.628137969243719*^9, {3.628138021354168*^9, 
+   3.628138029594029*^9}, {3.628138094064033*^9, 3.628138094408236*^9}, {
+   3.62813816757128*^9, 3.6281381728968687`*^9}, {3.6281382146235867`*^9, 
+   3.628138224959038*^9}, {3.628138831829352*^9, 3.628138887177539*^9}, {
+   3.628139035426938*^9, 3.628139039506349*^9}, {3.628139112030476*^9, 
+   3.628139180335926*^9}, {3.628139212554079*^9, 3.6281392539090033`*^9}, {
+   3.6281392839251947`*^9, 3.6281392925859203`*^9}, {3.628139483569718*^9, 
+   3.628139518064796*^9}, {3.6281396312486763`*^9, 3.628139684199718*^9}, {
+   3.6281401574742002`*^9, 3.628140195655538*^9}, {3.6281402376479*^9, 
+   3.628140267620904*^9}, {3.628140628342546*^9, 3.62814064721257*^9}, 
+   3.628140864603044*^9, {3.6281415886983*^9, 3.628141605814912*^9}, {
+   3.628141639986299*^9, 3.6281416486186132`*^9}, {3.628141684893738*^9, 
+   3.62814169382171*^9}, {3.628141925237845*^9, 3.628141928809301*^9}, {
+   3.628463542773148*^9, 3.628463544500288*^9}, {3.6284675614343224`*^9, 
+   3.628467561595962*^9}, {3.628468902343585*^9, 3.628468903126943*^9}, {
+   3.6284691449408073`*^9, 3.628469148291246*^9}, {3.628469235049973*^9, 
+   3.628469293111237*^9}, {3.628552966036528*^9, 3.628552983179007*^9}, {
+   3.628553030997692*^9, 3.628553039051*^9}, {3.628555067888809*^9, 
+   3.628555072775365*^9}, {3.628555504219945*^9, 3.628555527033608*^9}, {
+   3.628555940691537*^9, 3.628555987720106*^9}, {3.6285563868875*^9, 
+   3.6285563893654633`*^9}, {3.628557656959669*^9, 3.6285577400664473`*^9}, {
+   3.628557836492763*^9, 3.62855787132237*^9}, {3.62855792196305*^9, 
+   3.628557928027171*^9}, 3.628557987663797*^9, {3.628558039717259*^9, 
+   3.62855805154881*^9}, {3.628558284572981*^9, 3.628558297979167*^9}, 
+   3.6285583287520847`*^9, {3.628558393534422*^9, 3.628558403341547*^9}, {
+   3.6285584939225197`*^9, 3.6285585752706003`*^9}, 3.6285586993534946`*^9, {
+   3.628558822954289*^9, 3.62855882817024*^9}, {3.628558860520795*^9, 
+   3.628558906544877*^9}, {3.628558962933503*^9, 3.6285589884667797`*^9}, {
+   3.6285592233957787`*^9, 3.6285593212391233`*^9}, {3.62855935552573*^9, 
+   3.628559355709557*^9}, {3.628600232672228*^9, 3.628600232841812*^9}, {
+   3.628601129338249*^9, 3.628601191811534*^9}, {3.6286012246637497`*^9, 
+   3.62860122800193*^9}, 3.628601745358708*^9, {3.628601832355981*^9, 
+   3.628601856329583*^9}, {3.628614033237262*^9, 3.6286140477048483`*^9}, 
+   3.628614087438778*^9, 3.6286153033286*^9, {3.628615355086686*^9, 
+   3.6286153616676617`*^9}, {3.628643517265971*^9, 3.6286436601655416`*^9}}]
+},
+WindowSize->{1362, 777},
+WindowMargins->{{4, Automatic}, {Automatic, 4}},
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (August 26, \
+2012)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 175, 5, 27, "Input"],
+Cell[735, 27, 235, 7, 27, "Input"],
+Cell[973, 36, 2326, 38, 332, "Text"],
+Cell[3302, 76, 953, 23, 103, "Input"],
+Cell[4258, 101, 501, 12, 31, "Input"],
+Cell[4762, 115, 2057, 45, 133, "Input"],
+Cell[6822, 162, 1166, 25, 73, "Input"],
+Cell[CellGroupData[{
+Cell[8013, 191, 353, 4, 43, "Input"],
+Cell[8369, 197, 332, 4, 43, "Output"]
+}, Open  ]],
+Cell[8716, 204, 17202, 367, 1003, "Input"],
+Cell[25921, 573, 3986, 84, 208, "Input"],
+Cell[29910, 659, 139, 2, 27, "Input"],
+Cell[30052, 663, 818, 23, 58, "Input"],
+Cell[30873, 688, 1560, 33, 133, "Input"],
+Cell[32436, 723, 24067, 551, 1648, "Input"],
+Cell[CellGroupData[{
+Cell[56528, 1278, 506, 11, 73, "Input"],
+Cell[57037, 1291, 150, 3, 27, "Output"],
+Cell[57190, 1296, 151, 3, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[57378, 1304, 291, 5, 27, "Input"],
+Cell[CellGroupData[{
+Cell[57694, 1313, 888, 12, 20, "Print"],
+Cell[58585, 1327, 920, 13, 20, "Print"],
+Cell[59508, 1342, 895, 12, 20, "Print"],
+Cell[60406, 1356, 883, 12, 20, "Print"],
+Cell[61292, 1370, 896, 12, 20, "Print"],
+Cell[62191, 1384, 892, 12, 20, "Print"],
+Cell[63086, 1398, 918, 13, 20, "Print"],
+Cell[64007, 1413, 928, 13, 20, "Print"],
+Cell[64938, 1428, 908, 13, 20, "Print"],
+Cell[65849, 1443, 1065, 17, 20, "Print"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[66963, 1466, 326, 7, 27, "Input"],
+Cell[67292, 1475, 7706, 129, 399, "Output"]
+}, Open  ]],
+Cell[75013, 1607, 2129, 55, 103, "Input"],
+Cell[CellGroupData[{
+Cell[77167, 1666, 794, 19, 27, "Input"],
+Cell[77964, 1687, 4725, 81, 329, "Output"]
+}, Open  ]],
+Cell[82704, 1771, 1921, 44, 103, "Input"],
+Cell[84628, 1817, 1738, 40, 133, "Input"],
+Cell[86369, 1859, 1601, 36, 133, "Input"],
+Cell[87973, 1897, 1782, 39, 133, "Input"],
+Cell[89758, 1938, 7011, 133, 493, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
