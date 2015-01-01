@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     98786,       2137]
-NotebookOptionsPosition[     96773,       2073]
-NotebookOutlinePosition[     97127,       2089]
-CellTagsIndexPosition[     97084,       2086]
+NotebookDataLength[     96694,       2093]
+NotebookOptionsPosition[     94947,       2038]
+NotebookOutlinePosition[     95301,       2054]
+CellTagsIndexPosition[     95258,       2051]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -186,21 +186,6 @@ Cell[BoxData[
  CellChangeTimes->{{3.6285573880851*^9, 3.628557493560524*^9}, {
   3.6285575355303907`*^9, 3.62855753939995*^9}, {3.628557768655438*^9, 
   3.6285577769745502`*^9}}],
-
-Cell[CellGroupData[{
-
-Cell[BoxData["\"\<https://screener.finance.yahoo.com/b?sc=&im=&prmin=10&prmax=\
-&mcmin=500000000&mcmax=&dvymin=1&dvymax=&betamin=&betamax=&remin=500000000&\
-remax=&pmmin=&pmmax=&pemin=&pemax=15&pbmin=&pbmax=1.5&psmin=&psmax=&pegmin=&\
-pegmax=&gr=&grfy=&ar=&vw=0&db=stocks\>\""], "Input",
- CellChangeTimes->{{3.628642799621098*^9, 3.628642836474272*^9}}],
-
-Cell[BoxData["\<\"https://screener.finance.yahoo.com/b?sc=&im=&prmin=10&prmax=\
-&mcmin=500000000&mcmax=&dvymin=1&dvymax=&betamin=&betamax=&remin=500000000&\
-remax=&pmmin=&pmmax=&pemin=&pemax=15&pbmin=&pbmax=1.5&psmin=&psmax=&pegmin=&\
-pegmax=&gr=&grfy=&ar=&vw=0&db=stocks\"\>"], "Output",
- CellChangeTimes->{3.6286440456161633`*^9}]
-}, Open  ]],
 
 Cell[BoxData[
  RowBox[{
@@ -722,513 +707,508 @@ Cell[BoxData[
   3.628466586315023*^9}, {3.628466619258984*^9, 3.628466651912278*^9}}],
 
 Cell[BoxData[
- RowBox[{"\[IndentingNewLine]", 
-  RowBox[{"getGrahamScreenData", ":=", 
-   RowBox[{"Module", "[", 
-    RowBox[{
-     RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
-     RowBox[{"(*", 
-      RowBox[{
-      "Scrape", " ", "data", " ", "from", " ", "Yahoo", " ", "Finance", " ", 
-       "using", " ", "the", " ", "following", " ", 
-       RowBox[{"screen", ":"}]}], " ", "*)"}], "\[IndentingNewLine]", 
-     RowBox[{"(*", 
-      RowBox[{
-       RowBox[{"Price", "/", "Book"}], " ", "<", " ", 
-       RowBox[{"1.5", "\[IndentingNewLine]", 
-        RowBox[{"Market", " ", "Cap"}]}], " ", ">", " ", 
-       RowBox[{"100", "M", "\[IndentingNewLine]", 
-        RowBox[{"Stock", " ", "Price"}]}], " ", ">", " ", 
-       RowBox[{"10", "\[IndentingNewLine]", 
-        RowBox[{"P", "/", "E"}]}], " ", "<", " ", 
-       RowBox[{"15", "\[IndentingNewLine]", "Revenue"}], " ", ">", " ", 
-       "$500M"}], "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
+ RowBox[{"getGrahamScreenData", ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"(*", 
      RowBox[{
-      RowBox[{"baseurl", "=", 
-       RowBox[{"{", 
-        RowBox[{
-        "\"\<http://screener.finance.yahoo.com/b?vw=0&b=\>\"", ",", 
-         "\"\<&s=nm&pe=/15&pr=10/&mc=100000000/&dvy=0.1/&pb=/1.5&re=500000000/\
-&db=stocks\>\""}], "}"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
-      RowBox[{"gooddata", "=", "False"}], ";", "\[IndentingNewLine]", 
-      RowBox[{"While", "[", "\[IndentingNewLine]", 
+     "Scrape", " ", "data", " ", "from", " ", "Yahoo", " ", "Finance", " ", 
+      "using", " ", "the", " ", "following", " ", 
+      RowBox[{"screen", ":"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{"Price", "/", "Book"}], " ", "<", " ", 
+      RowBox[{"1.5", "\[IndentingNewLine]", 
+       RowBox[{"Market", " ", "Cap"}]}], " ", ">", " ", 
+      RowBox[{"100", "M", "\[IndentingNewLine]", 
+       RowBox[{"Stock", " ", "Price"}]}], " ", ">", " ", 
+      RowBox[{"10", "\[IndentingNewLine]", 
+       RowBox[{"P", "/", "E"}]}], " ", "<", " ", 
+      RowBox[{"15", "\[IndentingNewLine]", "Revenue"}], " ", ">", " ", 
+      "$500M"}], "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"baseurl", "=", 
+      RowBox[{"{", 
        RowBox[{
-        RowBox[{"Not", "[", "gooddata", "]"}], ",", "\[IndentingNewLine]", 
-        RowBox[{
-         RowBox[{"Pause", "[", "0.5", "]"}], ";", "\[IndentingNewLine]", 
-         RowBox[{"rawdata", "=", 
-          RowBox[{"ImportString", "[", "\[IndentingNewLine]", 
-           RowBox[{
-            RowBox[{"httpGet", "[", "\[IndentingNewLine]", 
-             RowBox[{"StringJoin", "[", 
-              RowBox[{
-               RowBox[{"baseurl", "[", 
-                RowBox[{"[", "1", "]"}], "]"}], ",", "\"\<1\>\"", ",", 
-               RowBox[{"baseurl", "[", 
-                RowBox[{"[", "2", "]"}], "]"}]}], "]"}], 
-             "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
-            RowBox[{"{", 
-             RowBox[{"\"\<HTML\>\"", ",", "\"\<Data\>\""}], "}"}]}], 
-           "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
-         RowBox[{"gooddata", "=", 
-          RowBox[{"StringFreeQ", "[", 
-           RowBox[{
-            RowBox[{"ToString", "[", "rawdata", "]"}], ",", 
-            "\"\<Will be right back...\>\""}], "]"}]}]}]}], 
-       "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
-      "\[IndentingNewLine]", 
-      RowBox[{"numberofstocks", "=", 
-       RowBox[{"FromDigits", "[", 
-        RowBox[{"StringReplace", "[", 
-         RowBox[{
+       "\"\<http://screener.finance.yahoo.com/b?vw=0&b=\>\"", ",", 
+        "\"\<&s=nm&pe=/15&pr=10/&mc=100000000/&dvy=0.1/&pb=/1.5&re=500000000/&\
+db=stocks\>\""}], "}"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     
+     RowBox[{"gooddata", "=", "False"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"While", "[", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Not", "[", "gooddata", "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Pause", "[", "0.5", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"rawdata", "=", 
+         RowBox[{"ImportString", "[", "\[IndentingNewLine]", 
           RowBox[{
-           RowBox[{"Flatten", "[", 
-            RowBox[{"StringSplit", "[", 
-             RowBox[{"rawdata", "[", 
-              RowBox[{"[", 
-               RowBox[{"1", ",", "1"}], "]"}], "]"}], "]"}], "]"}], "[", 
-           RowBox[{"[", "10", "]"}], "]"}], ",", 
-          RowBox[{"\"\<)\>\"", "\[Rule]", "\"\<\>\""}]}], "]"}], "]"}]}], ";",
-       "\[IndentingNewLine]", 
-      RowBox[{"rawdata", "=", 
-       RowBox[{
-        RowBox[{
-         RowBox[{"rawdata", "[", 
-          RowBox[{"[", "2", "]"}], "]"}], "[", 
-         RowBox[{"[", "1", "]"}], "]"}], "[", 
-        RowBox[{"[", 
-         RowBox[{"All", ",", 
-          RowBox[{"1", ";;", "19"}]}], "]"}], "]"}]}], ";", 
-      "\[IndentingNewLine]", 
-      RowBox[{"heading", "=", 
-       RowBox[{"rawdata", "[", 
-        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"rawdata", "[", 
-        RowBox[{"[", 
-         RowBox[{"2", ";;", "21"}], "]"}], "]"}]}], ";", 
-      "\[IndentingNewLine]", 
-      RowBox[{"iurl", "=", 
-       RowBox[{"Table", "[", 
-        RowBox[{"i", ",", 
-         RowBox[{"{", 
-          RowBox[{"i", ",", "1", ",", "numberofstocks", ",", "20"}], "}"}]}], 
-        "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"Do", "[", "\[IndentingNewLine]", 
-       RowBox[{
-        RowBox[{
-         RowBox[{"url", "=", 
-          RowBox[{"StringJoin", "[", 
-           RowBox[{
-            RowBox[{"baseurl", "[", 
-             RowBox[{"[", "1", "]"}], "]"}], ",", 
-            RowBox[{"ToString", "[", 
-             RowBox[{"iurl", "[", 
-              RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
-            RowBox[{"baseurl", "[", 
-             RowBox[{"[", "2", "]"}], "]"}]}], "]"}]}], ";", 
-         "\[IndentingNewLine]", 
-         RowBox[{"(*", 
-          RowBox[{
-           RowBox[{"url", "=", 
+           RowBox[{"httpGet", "[", "\[IndentingNewLine]", 
             RowBox[{"StringJoin", "[", 
              RowBox[{
-             "\"\<http://screener.finance.yahoo.com/b?vw=0&b=\>\"", ",", 
-              RowBox[{"ToString", "[", 
-               RowBox[{"iurl", "[", 
-                RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
-              "\"\<&s=nm&pe=/15&pr=10/&mc=100000000/&dvy=0.1/&pb=/1.5&re=\
+              RowBox[{"baseurl", "[", 
+               RowBox[{"[", "1", "]"}], "]"}], ",", "\"\<1\>\"", ",", 
+              RowBox[{"baseurl", "[", 
+               RowBox[{"[", "2", "]"}], "]"}]}], "]"}], "\[IndentingNewLine]",
+             "]"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"{", 
+            RowBox[{"\"\<HTML\>\"", ",", "\"\<Data\>\""}], "}"}]}], 
+          "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"gooddata", "=", 
+         RowBox[{"StringFreeQ", "[", 
+          RowBox[{
+           RowBox[{"ToString", "[", "rawdata", "]"}], ",", 
+           "\"\<Will be right back...\>\""}], "]"}]}]}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"numberofstocks", "=", 
+      RowBox[{"FromDigits", "[", 
+       RowBox[{"StringReplace", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Flatten", "[", 
+           RowBox[{"StringSplit", "[", 
+            RowBox[{"rawdata", "[", 
+             RowBox[{"[", 
+              RowBox[{"1", ",", "1"}], "]"}], "]"}], "]"}], "]"}], "[", 
+          RowBox[{"[", "10", "]"}], "]"}], ",", 
+         RowBox[{"\"\<)\>\"", "\[Rule]", "\"\<\>\""}]}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"rawdata", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"rawdata", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}], "[", 
+       RowBox[{"[", 
+        RowBox[{"All", ",", 
+         RowBox[{"1", ";;", "19"}]}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"heading", "=", 
+      RowBox[{"rawdata", "[", 
+       RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"rawdata", "[", 
+       RowBox[{"[", 
+        RowBox[{"2", ";;", "21"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"iurl", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{"i", ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", "numberofstocks", ",", "20"}], "}"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Do", "[", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"url", "=", 
+         RowBox[{"StringJoin", "[", 
+          RowBox[{
+           RowBox[{"baseurl", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], ",", 
+           RowBox[{"ToString", "[", 
+            RowBox[{"iurl", "[", 
+             RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+           RowBox[{"baseurl", "[", 
+            RowBox[{"[", "2", "]"}], "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"(*", 
+         RowBox[{
+          RowBox[{"url", "=", 
+           RowBox[{"StringJoin", "[", 
+            RowBox[{
+            "\"\<http://screener.finance.yahoo.com/b?vw=0&b=\>\"", ",", 
+             RowBox[{"ToString", "[", 
+              RowBox[{"iurl", "[", 
+               RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+             "\"\<&s=nm&pe=/15&pr=10/&mc=100000000/&dvy=0.1/&pb=/1.5&re=\
 500000000/&db=stocks\>\""}], "]"}]}], ";"}], "*)"}], "\[IndentingNewLine]", 
-         RowBox[{"gooddata", "=", "False"}], ";", "\[IndentingNewLine]", 
-         RowBox[{"While", "[", "\[IndentingNewLine]", 
+        RowBox[{"gooddata", "=", "False"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"While", "[", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"Not", "[", "gooddata", "]"}], ",", "\[IndentingNewLine]", 
           RowBox[{
-           RowBox[{"Not", "[", "gooddata", "]"}], ",", "\[IndentingNewLine]", 
-           
-           RowBox[{
-            RowBox[{"Pause", "[", "0.5", "]"}], ";", "\[IndentingNewLine]", 
-            RowBox[{"rawdata", "=", 
-             RowBox[{"ImportString", "[", "\[IndentingNewLine]", 
-              RowBox[{
-               RowBox[{"httpGet", "[", "\[IndentingNewLine]", 
-                RowBox[{"StringJoin", "[", 
-                 RowBox[{
-                  RowBox[{"baseurl", "[", 
-                   RowBox[{"[", "1", "]"}], "]"}], ",", 
-                  RowBox[{"ToString", "[", 
-                   RowBox[{"iurl", "[", 
-                    RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
-                  RowBox[{"baseurl", "[", 
-                   RowBox[{"[", "2", "]"}], "]"}]}], "]"}], 
-                "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
-               RowBox[{"{", 
-                RowBox[{"\"\<HTML\>\"", ",", "\"\<Data\>\""}], "}"}]}], 
-              "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
-            RowBox[{"gooddata", "=", 
-             RowBox[{"StringFreeQ", "[", 
-              RowBox[{
-               RowBox[{"ToString", "[", "rawdata", "]"}], ",", 
-               "\"\<Will be right back...\>\""}], "]"}]}]}]}], 
-          "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
-         RowBox[{"rawdata", "=", 
+           RowBox[{"Pause", "[", "0.5", "]"}], ";", "\[IndentingNewLine]", 
+           RowBox[{"rawdata", "=", 
+            RowBox[{"ImportString", "[", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"httpGet", "[", "\[IndentingNewLine]", 
+               RowBox[{"StringJoin", "[", 
+                RowBox[{
+                 RowBox[{"baseurl", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ",", 
+                 RowBox[{"ToString", "[", 
+                  RowBox[{"iurl", "[", 
+                   RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+                 RowBox[{"baseurl", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}]}], "]"}], 
+               "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
+              RowBox[{"{", 
+               RowBox[{"\"\<HTML\>\"", ",", "\"\<Data\>\""}], "}"}]}], 
+             "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"gooddata", "=", 
+            RowBox[{"StringFreeQ", "[", 
+             RowBox[{
+              RowBox[{"ToString", "[", "rawdata", "]"}], ",", 
+              "\"\<Will be right back...\>\""}], "]"}]}]}]}], 
+         "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"rawdata", "=", 
+         RowBox[{
           RowBox[{
-           RowBox[{
-            RowBox[{"rawdata", "[", 
-             RowBox[{"[", "2", "]"}], "]"}], "[", 
-            RowBox[{"[", "1", "]"}], "]"}], "[", 
-           RowBox[{"[", 
-            RowBox[{"All", ",", 
-             RowBox[{"1", ";;", "19"}]}], "]"}], "]"}]}], ";", 
-         "\[IndentingNewLine]", 
-         RowBox[{"processeddata", "=", 
-          RowBox[{"Join", "[", 
-           RowBox[{"processeddata", ",", 
-            RowBox[{"rawdata", "[", 
-             RowBox[{"[", 
-              RowBox[{"2", ";;", 
-               RowBox[{"Length", "[", "rawdata", "]"}]}], "]"}], "]"}]}], 
-           "]"}]}]}], ",", "\[IndentingNewLine]", 
-        RowBox[{"{", 
-         RowBox[{"i", ",", "2", ",", 
-          RowBox[{"Length", "[", "iurl", "]"}]}], "}"}]}], 
-       "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
-      RowBox[{"Print", "[", "\"\<Scraped data from yahoo screen\>\"", "]"}], 
-      ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
-      RowBox[{"(*", " ", 
-       RowBox[{
-        RowBox[{
-         RowBox[{"Drop", " ", "\"\<Index Mem\>\""}], " ", "-", " ", "4"}], 
-        ",", " ", 
-        RowBox[{"\"\<Return %\>\"", " ", "-", " ", "9"}], ",", " ", 
-        RowBox[{"\"\<Growth\>\"", " ", "-", " ", 
-         RowBox[{"18", " ", "columns"}]}]}], " ", "*)"}], 
-      "\[IndentingNewLine]", 
+           RowBox[{"rawdata", "[", 
+            RowBox[{"[", "2", "]"}], "]"}], "[", 
+           RowBox[{"[", "1", "]"}], "]"}], "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", 
+            RowBox[{"1", ";;", "19"}]}], "]"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"processeddata", "=", 
+         RowBox[{"Join", "[", 
+          RowBox[{"processeddata", ",", 
+           RowBox[{"rawdata", "[", 
+            RowBox[{"[", 
+             RowBox[{"2", ";;", 
+              RowBox[{"Length", "[", "rawdata", "]"}]}], "]"}], "]"}]}], 
+          "]"}]}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "2", ",", 
+         RowBox[{"Length", "[", "iurl", "]"}]}], "}"}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", "\"\<Scraped data from yahoo screen\>\"", "]"}], 
+     ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
       RowBox[{
-      "Print", "[", 
-       "\"\<Dropped Index Mem (4), Return % (9), and Growth (18) columns\>\"",
-        "]"}], ";", "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"Drop", "[", 
-        RowBox[{"processeddata", ",", "None", ",", 
-         RowBox[{"{", "18", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"heading", "=", 
-       RowBox[{"Drop", "[", 
-        RowBox[{"heading", ",", 
-         RowBox[{"{", "18", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"Drop", "[", 
-        RowBox[{"processeddata", ",", "None", ",", 
-         RowBox[{"{", "9", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"heading", "=", 
-       RowBox[{"Drop", "[", 
-        RowBox[{"heading", ",", 
-         RowBox[{"{", "9", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"Drop", "[", 
-        RowBox[{"processeddata", ",", "None", ",", 
-         RowBox[{"{", "4", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"heading", "=", 
-       RowBox[{"Drop", "[", 
-        RowBox[{"heading", ",", 
-         RowBox[{"{", "4", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{
-       RowBox[{"heading", "[", 
-        RowBox[{"[", "4", "]"}], "]"}], "=", "\"\<Price\>\""}], ";", 
-      "\[IndentingNewLine]", "\[IndentingNewLine]", 
-      RowBox[{"(*", " ", 
        RowBox[{
-       "Convert", " ", "strings", " ", "in", " ", "data", " ", "to", " ", 
-        "numbers"}], " ", "*)"}], "\[IndentingNewLine]", 
+        RowBox[{"Drop", " ", "\"\<Index Mem\>\""}], " ", "-", " ", "4"}], ",",
+        " ", 
+       RowBox[{"\"\<Return %\>\"", " ", "-", " ", "9"}], ",", " ", 
+       RowBox[{"\"\<Growth\>\"", " ", "-", " ", 
+        RowBox[{"18", " ", "columns"}]}]}], " ", "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{
+     "Print", "[", 
+      "\"\<Dropped Index Mem (4), Return % (9), and Growth (18) columns\>\"", 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"Drop", "[", 
+       RowBox[{"processeddata", ",", "None", ",", 
+        RowBox[{"{", "18", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"heading", "=", 
+      RowBox[{"Drop", "[", 
+       RowBox[{"heading", ",", 
+        RowBox[{"{", "18", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"Drop", "[", 
+       RowBox[{"processeddata", ",", "None", ",", 
+        RowBox[{"{", "9", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"heading", "=", 
+      RowBox[{"Drop", "[", 
+       RowBox[{"heading", ",", 
+        RowBox[{"{", "9", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"Drop", "[", 
+       RowBox[{"processeddata", ",", "None", ",", 
+        RowBox[{"{", "4", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"heading", "=", 
+      RowBox[{"Drop", "[", 
+       RowBox[{"heading", ",", 
+        RowBox[{"{", "4", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"heading", "[", 
+       RowBox[{"[", "4", "]"}], "]"}], "=", "\"\<Price\>\""}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
       RowBox[{
-       RowBox[{"heading", "[", 
-        RowBox[{"[", "7", "]"}], "]"}], "=", "\"\<Div/Yld (%)\>\""}], ";", 
-      "\[IndentingNewLine]", 
-      RowBox[{"Do", "[", 
+      "Convert", " ", "strings", " ", "in", " ", "data", " ", "to", " ", 
+       "numbers"}], " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"heading", "[", 
+       RowBox[{"[", "7", "]"}], "]"}], "=", "\"\<Div/Yld (%)\>\""}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Do", "[", 
+      RowBox[{
        RowBox[{
-        RowBox[{
+        RowBox[{"processeddata", "[", 
+         RowBox[{"[", 
+          RowBox[{"i", ",", "7"}], "]"}], "]"}], "=", 
+        RowBox[{"ToExpression", "[", 
+         RowBox[{"StringDrop", "[", 
+          RowBox[{
+           RowBox[{"processeddata", "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "7"}], "]"}], "]"}], ",", 
+           RowBox[{"-", "1"}]}], "]"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", 
+         RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], ";", 
+     RowBox[{"Do", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"processeddata", "[", 
+         RowBox[{"[", 
+          RowBox[{"i", ",", "6"}], "]"}], "]"}], "=", 
+        RowBox[{"financeNotationToInteger", "[", 
          RowBox[{"processeddata", "[", 
           RowBox[{"[", 
-           RowBox[{"i", ",", "7"}], "]"}], "]"}], "=", 
-         RowBox[{"ToExpression", "[", 
-          RowBox[{"StringDrop", "[", 
-           RowBox[{
-            RowBox[{"processeddata", "[", 
-             RowBox[{"[", 
-              RowBox[{"i", ",", "7"}], "]"}], "]"}], ",", 
-            RowBox[{"-", "1"}]}], "]"}], "]"}]}], ",", 
-        RowBox[{"{", 
-         RowBox[{"i", ",", "1", ",", 
-          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
-      ";", 
-      RowBox[{"Do", "[", 
-       RowBox[{
-        RowBox[{
-         RowBox[{"processeddata", "[", 
-          RowBox[{"[", 
-           RowBox[{"i", ",", "6"}], "]"}], "]"}], "=", 
-         RowBox[{"financeNotationToInteger", "[", 
-          RowBox[{"processeddata", "[", 
-           RowBox[{"[", 
-            RowBox[{"i", ",", "6"}], "]"}], "]"}], "]"}]}], ",", 
-        RowBox[{"{", 
-         RowBox[{"i", ",", "1", ",", 
-          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
-      ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
-      RowBox[{"(*", " ", 
-       RowBox[{
-       "Screen", " ", "out", " ", "banks", " ", "and", " ", "insurance", " ", 
-        "companies"}], " ", "*)"}], "\[IndentingNewLine]", 
-      RowBox[{
-      "Print", "[", "\"\<Removed banks and insurance companies\>\"", "]"}], 
-      ";", "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"Select", "[", 
-        RowBox[{"processeddata", ",", 
-         RowBox[{
-          RowBox[{
-           RowBox[{"StringMatchQ", "[", 
-            RowBox[{
-             RowBox[{"#", "[", 
-              RowBox[{"[", "3", "]"}], "]"}], ",", "\"\<*Insurance*\>\""}], 
-            "]"}], "\[NotEqual]", "True"}], "&"}]}], "]"}]}], ";", 
-      "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"Select", "[", 
-        RowBox[{"processeddata", ",", 
-         RowBox[{
-          RowBox[{
-           RowBox[{"StringMatchQ", "[", 
-            RowBox[{
-             RowBox[{"#", "[", 
-              RowBox[{"[", "3", "]"}], "]"}], ",", "\"\<*Banks*\>\""}], "]"}],
-            "\[NotEqual]", "True"}], "&"}]}], "]"}]}], ";", 
+           RowBox[{"i", ",", "6"}], "]"}], "]"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", 
+         RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], ";",
       "\[IndentingNewLine]", "\[IndentingNewLine]", 
-      RowBox[{"(*", " ", 
-       RowBox[{
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "Screen", " ", "out", " ", "banks", " ", "and", " ", "insurance", " ", 
+       "companies"}], " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{
+     "Print", "[", "\"\<Removed banks and insurance companies\>\"", "]"}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"Select", "[", 
+       RowBox[{"processeddata", ",", 
         RowBox[{
          RowBox[{
-          RowBox[{"Screen", " ", "for"}], " ", ">", 
-          RowBox[{"$500M", " ", "sales", "\[IndentingNewLine]", "PSR"}]}], 
-         "=", 
-         RowBox[{
-          RowBox[{"(", 
-           RowBox[{"Market", " ", "Capitalization"}], ")"}], "/", 
-          RowBox[{"(", 
-           RowBox[{"Total", " ", "Sales"}], ")"}]}]}], ",", 
-        RowBox[{
-         RowBox[{"therefore", " ", 
-          RowBox[{"(", 
-           RowBox[{"Total", " ", "Sales"}], ")"}]}], "=", 
-         RowBox[{
-          RowBox[{"(", 
-           RowBox[{"Market", " ", "Capitalization"}], ")"}], "/", "PSR"}]}]}],
-        "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
-      RowBox[{"Print", "[", "\"\<Screen for >$500M sales\>\"", "]"}], ";", 
-      "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"Select", "[", 
-        RowBox[{"processeddata", ",", 
-         RowBox[{
-          RowBox[{
-           RowBox[{"#", "[", 
-            RowBox[{"[", "13", "]"}], "]"}], ">", "0."}], "&"}]}], "]"}]}], 
-      ";", "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"Select", "[", 
-        RowBox[{"processeddata", ",", 
-         RowBox[{
-          RowBox[{
+          RowBox[{"StringMatchQ", "[", 
            RowBox[{
             RowBox[{"#", "[", 
-             RowBox[{"[", "6", "]"}], "]"}], "/", 
-            RowBox[{"#", "[", 
-             RowBox[{"[", "13", "]"}], "]"}]}], ">", "500000000"}], "&"}]}], 
-        "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
-      RowBox[{"(*", " ", 
-       RowBox[{
+             RowBox[{"[", "3", "]"}], "]"}], ",", "\"\<*Insurance*\>\""}], 
+           "]"}], "\[NotEqual]", "True"}], "&"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"Select", "[", 
+       RowBox[{"processeddata", ",", 
         RowBox[{
          RowBox[{
-         "Screen", " ", "for", " ", "some", " ", "value", " ", "of", " ", 
-          "5"}], "-", 
-         RowBox[{"yr", " ", "growth"}]}], ",", " ", 
-        RowBox[{"convert", " ", "to", " ", "number"}], ",", " ", 
-        RowBox[{
-         RowBox[{
-         "then", " ", "screen", " ", "for", " ", "positive", " ", "5"}], "-", 
-         
-         RowBox[{"yr", " ", "growth", " ", "rate"}]}]}], "*)"}], 
-      "\[IndentingNewLine]", 
-      RowBox[{
-      "Print", "[", "\"\<Screen for positive 5-yr growth rate\>\"", "]"}], 
-      ";", "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"Select", "[", 
-        RowBox[{"processeddata", ",", 
-         RowBox[{
-          RowBox[{
-           RowBox[{"#", "[", 
-            RowBox[{"[", "15", "]"}], "]"}], "\[NotEqual]", "\"\<N/A\>\""}], 
-          "&"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{
-       RowBox[{"heading", "[", 
-        RowBox[{"[", "15", "]"}], "]"}], "=", "\"\<5-yr Growth (%)\>\""}], 
-      ";", "\[IndentingNewLine]", 
-      RowBox[{"Do", "[", 
-       RowBox[{
-        RowBox[{
-         RowBox[{"processeddata", "[", 
-          RowBox[{"[", 
-           RowBox[{"i", ",", "15"}], "]"}], "]"}], "=", 
-         RowBox[{"ToExpression", "[", 
-          RowBox[{"StringDrop", "[", 
+          RowBox[{"StringMatchQ", "[", 
            RowBox[{
-            RowBox[{"processeddata", "[", 
-             RowBox[{"[", 
-              RowBox[{"i", ",", "15"}], "]"}], "]"}], ",", 
-            RowBox[{"-", "1"}]}], "]"}], "]"}]}], ",", 
-        RowBox[{"{", 
-         RowBox[{"i", ",", "1", ",", 
-          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
-      ";", "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"Select", "[", 
-        RowBox[{"processeddata", ",", 
-         RowBox[{
-          RowBox[{
-           RowBox[{"#", "[", 
-            RowBox[{"[", "15", "]"}], "]"}], ">", "0."}], "&"}]}], "]"}]}], 
-      ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
-      RowBox[{"(*", " ", 
-       RowBox[{
-       "Add", " ", "average", " ", "volume", " ", "data", " ", "then", " ", 
-        "screen", " ", "for", " ", "value", " ", "greater", " ", "then", " ", 
-        "500", "k"}], " ", "*)"}], "\[IndentingNewLine]", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "3", "]"}], "]"}], ",", "\"\<*Banks*\>\""}], "]"}], 
+          "\[NotEqual]", "True"}], "&"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
       RowBox[{
-      "Print", "[", "\"\<Screening for >500k average volume\>\"", "]"}], ";", 
-      "\[IndentingNewLine]", 
-      RowBox[{"Do", "[", 
        RowBox[{
         RowBox[{
+         RowBox[{"Screen", " ", "for"}], " ", ">", 
+         RowBox[{"$500M", " ", "sales", "\[IndentingNewLine]", "PSR"}]}], "=", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"Market", " ", "Capitalization"}], ")"}], "/", 
+         RowBox[{"(", 
+          RowBox[{"Total", " ", "Sales"}], ")"}]}]}], ",", 
+       RowBox[{
+        RowBox[{"therefore", " ", 
+         RowBox[{"(", 
+          RowBox[{"Total", " ", "Sales"}], ")"}]}], "=", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"Market", " ", "Capitalization"}], ")"}], "/", "PSR"}]}]}], 
+      "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", "\"\<Screen for >$500M sales\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"Select", "[", 
+       RowBox[{"processeddata", ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#", "[", 
+           RowBox[{"[", "13", "]"}], "]"}], ">", "0."}], "&"}]}], "]"}]}], 
+     ";", "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"Select", "[", 
+       RowBox[{"processeddata", ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "6", "]"}], "]"}], "/", 
+           RowBox[{"#", "[", 
+            RowBox[{"[", "13", "]"}], "]"}]}], ">", "500000000"}], "&"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+        "Screen", " ", "for", " ", "some", " ", "value", " ", "of", " ", 
+         "5"}], "-", 
+        RowBox[{"yr", " ", "growth"}]}], ",", " ", 
+       RowBox[{"convert", " ", "to", " ", "number"}], ",", " ", 
+       RowBox[{
+        RowBox[{
+        "then", " ", "screen", " ", "for", " ", "positive", " ", "5"}], "-", 
+        RowBox[{"yr", " ", "growth", " ", "rate"}]}]}], "*)"}], 
+     "\[IndentingNewLine]", 
+     RowBox[{
+     "Print", "[", "\"\<Screen for positive 5-yr growth rate\>\"", "]"}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"Select", "[", 
+       RowBox[{"processeddata", ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#", "[", 
+           RowBox[{"[", "15", "]"}], "]"}], "\[NotEqual]", "\"\<N/A\>\""}], 
+         "&"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"heading", "[", 
+       RowBox[{"[", "15", "]"}], "]"}], "=", "\"\<5-yr Growth (%)\>\""}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{"Do", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"processeddata", "[", 
+         RowBox[{"[", 
+          RowBox[{"i", ",", "15"}], "]"}], "]"}], "=", 
+        RowBox[{"ToExpression", "[", 
+         RowBox[{"StringDrop", "[", 
+          RowBox[{
+           RowBox[{"processeddata", "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "15"}], "]"}], "]"}], ",", 
+           RowBox[{"-", "1"}]}], "]"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", 
+         RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"Select", "[", 
+       RowBox[{"processeddata", ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#", "[", 
+           RowBox[{"[", "15", "]"}], "]"}], ">", "0."}], "&"}]}], "]"}]}], 
+     ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "Add", " ", "average", " ", "volume", " ", "data", " ", "then", " ", 
+       "screen", " ", "for", " ", "value", " ", "greater", " ", "then", " ", 
+       "500", "k"}], " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{
+     "Print", "[", "\"\<Screening for >500k average volume\>\"", "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Do", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"processeddata", "[", 
+         RowBox[{"[", 
+          RowBox[{"i", ",", "5"}], "]"}], "]"}], "=", 
+        RowBox[{"yahooFinancialData", "[", 
+         RowBox[{
+          RowBox[{"processeddata", "[", 
+           RowBox[{"[", 
+            RowBox[{"i", ",", "1"}], "]"}], "]"}], ",", "\"\<a2\>\""}], 
+         "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", 
+         RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"Select", "[", 
+       RowBox[{"processeddata", ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#", "[", 
+           RowBox[{"[", "5", "]"}], "]"}], ">", "500000"}], "&"}]}], "]"}]}], 
+     ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{
+     "Print", "[", 
+      "\"\<Appending Graham Numbers and screening for positive values\>\"", 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Do", "[", 
+      RowBox[{
+       RowBox[{"AppendTo", "[", 
+        RowBox[{
          RowBox[{"processeddata", "[", 
-          RowBox[{"[", 
-           RowBox[{"i", ",", "5"}], "]"}], "]"}], "=", 
-         RowBox[{"yahooFinancialData", "[", 
-          RowBox[{
-           RowBox[{"processeddata", "[", 
-            RowBox[{"[", 
-             RowBox[{"i", ",", "1"}], "]"}], "]"}], ",", "\"\<a2\>\""}], 
-          "]"}]}], ",", 
-        RowBox[{"{", 
-         RowBox[{"i", ",", "1", ",", 
-          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
-      ";", "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"Select", "[", 
-        RowBox[{"processeddata", ",", 
+          RowBox[{"[", "i", "]"}], "]"}], ",", 
+         RowBox[{"GrahamNumber", "[", 
+          RowBox[{"processeddata", "[", 
+           RowBox[{"[", 
+            RowBox[{"i", ",", "1"}], "]"}], "]"}], "]"}]}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", 
+         RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"heading", ",", "\"\<Graham Number\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"Select", "[", 
+       RowBox[{"processeddata", ",", 
+        RowBox[{
          RowBox[{
-          RowBox[{
-           RowBox[{"#", "[", 
-            RowBox[{"[", "5", "]"}], "]"}], ">", "500000"}], "&"}]}], "]"}]}],
-       ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", "17", "]"}], "]"}], ">", "0."}], "&"}]}], "]"}]}], 
+     ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{
+     "Print", "[", 
+      "\"\<Screen for stocks with uninterrupted Longterm (20 years) Dividends\
+\>\"", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Do", "[", 
       RowBox[{
-      "Print", "[", 
-       "\"\<Appending Graham Numbers and screening for positive values\>\"", 
-       "]"}], ";", "\[IndentingNewLine]", 
-      RowBox[{"Do", "[", 
-       RowBox[{
-        RowBox[{"AppendTo", "[", 
+       RowBox[{"AppendTo", "[", 
+        RowBox[{
+         RowBox[{"processeddata", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], ",", 
+         RowBox[{"UninterruptedLongtermDividends", "[", 
+          RowBox[{"processeddata", "[", 
+           RowBox[{"[", 
+            RowBox[{"i", ",", "1"}], "]"}], "]"}], "]"}]}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", 
+         RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], ";",
+      "\[IndentingNewLine]", 
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"heading", ",", "\"\<Uninterrupted Longterm Dividend\>\""}], 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"Select", "[", 
+       RowBox[{"processeddata", ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#", "[", 
+           RowBox[{"[", "18", "]"}], "]"}], "\[Equal]", "True"}], "&"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{
+     "Print", "[", "\"\<Appending GN/P and sorting in descending order\>\"", 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Do", "[", 
+      RowBox[{
+       RowBox[{"AppendTo", "[", 
+        RowBox[{
+         RowBox[{"processeddata", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], ",", 
          RowBox[{
           RowBox[{"processeddata", "[", 
-           RowBox[{"[", "i", "]"}], "]"}], ",", 
-          RowBox[{"GrahamNumber", "[", 
-           RowBox[{"processeddata", "[", 
-            RowBox[{"[", 
-             RowBox[{"i", ",", "1"}], "]"}], "]"}], "]"}]}], "]"}], ",", 
-        RowBox[{"{", 
-         RowBox[{"i", ",", "1", ",", 
-          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
-      ";", "\[IndentingNewLine]", 
-      RowBox[{"AppendTo", "[", 
-       RowBox[{"heading", ",", "\"\<Graham Number\>\""}], "]"}], ";", 
-      "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"Select", "[", 
-        RowBox[{"processeddata", ",", 
-         RowBox[{
-          RowBox[{
-           RowBox[{"#", "[", 
-            RowBox[{"[", "17", "]"}], "]"}], ">", "0."}], "&"}]}], "]"}]}], 
-      ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
-      RowBox[{
-      "Print", "[", 
-       "\"\<Screen for stocks with uninterrupted Longterm (20 years) \
-Dividends\>\"", "]"}], ";", "\[IndentingNewLine]", 
-      RowBox[{"Do", "[", 
-       RowBox[{
-        RowBox[{"AppendTo", "[", 
-         RowBox[{
+           RowBox[{"[", 
+            RowBox[{"i", ",", "17"}], "]"}], "]"}], "/", 
           RowBox[{"processeddata", "[", 
-           RowBox[{"[", "i", "]"}], "]"}], ",", 
-          RowBox[{"UninterruptedLongtermDividends", "[", 
-           RowBox[{"processeddata", "[", 
-            RowBox[{"[", 
-             RowBox[{"i", ",", "1"}], "]"}], "]"}], "]"}]}], "]"}], ",", 
-        RowBox[{"{", 
-         RowBox[{"i", ",", "1", ",", 
-          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
-      ";", "\[IndentingNewLine]", 
-      RowBox[{"AppendTo", "[", 
-       RowBox[{"heading", ",", "\"\<Uninterrupted Longterm Dividend\>\""}], 
-       "]"}], ";", "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"Select", "[", 
-        RowBox[{"processeddata", ",", 
-         RowBox[{
-          RowBox[{
-           RowBox[{"#", "[", 
-            RowBox[{"[", "18", "]"}], "]"}], "\[Equal]", "True"}], "&"}]}], 
-        "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
-      RowBox[{
-      "Print", "[", "\"\<Appending GN/P and sorting in descending order\>\"", 
-       "]"}], ";", "\[IndentingNewLine]", 
-      RowBox[{"Do", "[", 
-       RowBox[{
-        RowBox[{"AppendTo", "[", 
-         RowBox[{
-          RowBox[{"processeddata", "[", 
-           RowBox[{"[", "i", "]"}], "]"}], ",", 
-          RowBox[{
-           RowBox[{"processeddata", "[", 
-            RowBox[{"[", 
-             RowBox[{"i", ",", "17"}], "]"}], "]"}], "/", 
-           RowBox[{"processeddata", "[", 
-            RowBox[{"[", 
-             RowBox[{"i", ",", "4"}], "]"}], "]"}]}]}], "]"}], ",", 
-        RowBox[{"{", 
-         RowBox[{"i", ",", "1", ",", 
-          RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], 
-      ";", "\[IndentingNewLine]", 
-      RowBox[{"AppendTo", "[", 
-       RowBox[{"heading", ",", "\"\<GN/P\>\""}], "]"}], ";", 
+           RowBox[{"[", 
+            RowBox[{"i", ",", "4"}], "]"}], "]"}]}]}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", 
+         RowBox[{"Length", "[", "processeddata", "]"}]}], "}"}]}], "]"}], ";",
       "\[IndentingNewLine]", 
-      RowBox[{"processeddata", "=", 
-       RowBox[{"Sort", "[", 
-        RowBox[{"processeddata", ",", 
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"heading", ",", "\"\<GN/P\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"processeddata", "=", 
+      RowBox[{"Sort", "[", 
+       RowBox[{"processeddata", ",", 
+        RowBox[{
          RowBox[{
-          RowBox[{
-           RowBox[{"#1", "[", 
-            RowBox[{"[", "19", "]"}], "]"}], ">", 
-           RowBox[{"#2", "[", 
-            RowBox[{"[", "19", "]"}], "]"}]}], "&"}]}], "]"}]}], ";", 
-      "\[IndentingNewLine]", "\[IndentingNewLine]", 
-      RowBox[{"Print", "[", 
-       RowBox[{"\"\<The screen resulted in \>\"", ",", 
-        RowBox[{"Length", "[", "processeddata", "]"}], ",", 
-        "\"\< stocks.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
-      "\[IndentingNewLine]", 
-      RowBox[{"PrependTo", "[", 
-       RowBox[{"processeddata", ",", "heading"}], "]"}], ";", 
-      "\[IndentingNewLine]", "processeddata"}]}], "\[IndentingNewLine]", 
-    "]"}]}]}]], "Input",
+          RowBox[{"#1", "[", 
+           RowBox[{"[", "19", "]"}], "]"}], ">", 
+          RowBox[{"#2", "[", 
+           RowBox[{"[", "19", "]"}], "]"}]}], "&"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"Print", "[", 
+      RowBox[{"\"\<The screen resulted in \>\"", ",", 
+       RowBox[{"Length", "[", "processeddata", "]"}], ",", 
+       "\"\< stocks.\>\""}], "]"}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"PrependTo", "[", 
+      RowBox[{"processeddata", ",", "heading"}], "]"}], ";", 
+     "\[IndentingNewLine]", "processeddata"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
  CellChangeTimes->{{3.6280940090854263`*^9, 3.628094010615542*^9}, {
    3.6280945343598413`*^9, 3.6280945571577044`*^9}, {3.6280947264154863`*^9, 
    3.62809472694198*^9}, {3.6280948339942636`*^9, 3.628094841896377*^9}, {
@@ -1272,33 +1252,7 @@ Dividends\>\"", "]"}], ";", "\[IndentingNewLine]",
    3.6286186941283493`*^9, 3.6286187235028877`*^9}, {3.6286188256306133`*^9, 
    3.628618845082923*^9}, {3.6286429496188*^9, 3.628642969411581*^9}, {
    3.628643030219817*^9, 3.628643061133768*^9}, {3.628643116586534*^9, 
-   3.628643119434512*^9}}],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"str", "=", "\"\<Accident & Health Insurance\>\""}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{"StringMatchQ", "[", 
-  RowBox[{"str", ",", "\"\<*Insurance*\>\""}], "]"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"str2", "=", "\"\<Oil & Gas Equipment & Services\>\""}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{"StringMatchQ", "[", 
-  RowBox[{"str2", ",", "\"\<*Insurance*\>\""}], "]"}]}], "Input",
- CellChangeTimes->{{3.6286184010737143`*^9, 3.628618524469183*^9}}],
-
-Cell[BoxData["True"], "Output",
- CellChangeTimes->{
-  3.628618426767886*^9, {3.628618457520619*^9, 3.628618525331188*^9}, 
-   3.6286440458703136`*^9}],
-
-Cell[BoxData["False"], "Output",
- CellChangeTimes->{
-  3.628618426767886*^9, {3.628618457520619*^9, 3.628618525331188*^9}, 
-   3.6286440458719807`*^9}]
-}, Open  ]],
+   3.628643119434512*^9}, 3.629116713984939*^9}],
 
 Cell[CellGroupData[{
 
@@ -1323,7 +1277,8 @@ Cell[BoxData["\<\"Scraped data from yahoo screen\"\>"], "Print",
    3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
    3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
    3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
-   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058934783*^9}],
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058934783*^9, 
+   3.62911667163452*^9}],
 
 Cell[BoxData["\<\"Dropped Index Mem (4), Return % (9), and Growth (18) \
 columns\"\>"], "Print",
@@ -1338,7 +1293,8 @@ columns\"\>"], "Print",
    3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
    3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
    3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
-   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058935953*^9}],
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058934783*^9, 
+   3.62911667163559*^9}],
 
 Cell[BoxData["\<\"Removed banks and insurance companies\"\>"], "Print",
  CellChangeTimes->{
@@ -1352,7 +1308,8 @@ Cell[BoxData["\<\"Removed banks and insurance companies\"\>"], "Print",
    3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
    3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
    3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
-   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058936969*^9}],
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058934783*^9, 
+   3.629116671712356*^9}],
 
 Cell[BoxData["\<\"Screen for >$500M sales\"\>"], "Print",
  CellChangeTimes->{
@@ -1366,7 +1323,8 @@ Cell[BoxData["\<\"Screen for >$500M sales\"\>"], "Print",
    3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
    3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
    3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
-   3.628601274031679*^9, 3.628618749404726*^9, 3.6286440589379883`*^9}],
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058934783*^9, 
+   3.629116671713623*^9}],
 
 Cell[BoxData["\<\"Screen for positive 5-yr growth rate\"\>"], "Print",
  CellChangeTimes->{
@@ -1380,7 +1338,8 @@ Cell[BoxData["\<\"Screen for positive 5-yr growth rate\"\>"], "Print",
    3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
    3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
    3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
-   3.628601274031679*^9, 3.628618749404726*^9, 3.6286440589391327`*^9}],
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058934783*^9, 
+   3.629116671714912*^9}],
 
 Cell[BoxData["\<\"Screening for >500k average volume\"\>"], "Print",
  CellChangeTimes->{
@@ -1394,7 +1353,8 @@ Cell[BoxData["\<\"Screening for >500k average volume\"\>"], "Print",
    3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
    3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
    3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
-   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058940185*^9}],
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058934783*^9, 
+   3.629116671716139*^9}],
 
 Cell[BoxData["\<\"Appending Graham Numbers and screening for positive \
 values\"\>"], "Print",
@@ -1409,7 +1369,8 @@ values\"\>"], "Print",
    3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
    3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
    3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
-   3.628601274031679*^9, 3.628618749404726*^9, 3.628644068987648*^9}],
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058934783*^9, 
+   3.629116681483109*^9}],
 
 Cell[BoxData["\<\"Screen for stocks with uninterrupted Longterm (20 years) \
 Dividends\"\>"], "Print",
@@ -1424,7 +1385,8 @@ Dividends\"\>"], "Print",
    3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
    3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
    3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
-   3.628601274031679*^9, 3.628618749404726*^9, 3.6286440921980257`*^9}],
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058934783*^9, 
+   3.6291167050654593`*^9}],
 
 Cell[BoxData["\<\"Appending GN/P and sorting in descending order\"\>"], \
 "Print",
@@ -1439,7 +1401,8 @@ Cell[BoxData["\<\"Appending GN/P and sorting in descending order\"\>"], \
    3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
    3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
    3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
-   3.628601274031679*^9, 3.628618749404726*^9, 3.6286441004381037`*^9}],
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058934783*^9, 
+   3.629116712556308*^9}],
 
 Cell[BoxData[
  InterpretationBox[
@@ -1458,7 +1421,8 @@ Cell[BoxData[
    3.62859886957635*^9}, 3.628598964682907*^9, 3.628599836005835*^9, {
    3.6286001460216503`*^9, 3.6286001509190197`*^9}, {3.6286003337693872`*^9, 
    3.6286003475918283`*^9}, 3.6286008504267263`*^9, 3.628601097391539*^9, 
-   3.628601274031679*^9, 3.628618749404726*^9, 3.628644100439642*^9}]
+   3.628601274031679*^9, 3.628618749404726*^9, 3.628644058934783*^9, 
+   3.629116712557637*^9}]
 }, Open  ]]
 }, Open  ]],
 
@@ -1487,92 +1451,92 @@ E\"\>", "\<\"Price/Book\"\>", "\<\"Price/Sales\"\>", "\<\"PEG\"\>", "\<\"5-yr \
 Growth (%)\"\>", "\<\"Avg. Rec\"\>", "\<\"Graham Number\"\>", \
 "\<\"Uninterrupted Longterm Dividend\"\>", "\<\"GN/P\"\>"},
      {"2", "\<\"CSH\"\>", "\<\"Cash America International, Inc\"\>", \
-"\<\"Credit Services\"\>", "21.07`", "543803", "6.0866`*^8", "0.7`", 
+"\<\"Credit Services\"\>", "21.07`", "536955", "6.0866`*^8", "0.7`", 
       "0.58`", "\<\"$1.90B\"\>", "\<\"5.5%\"\>", "5.96`", "0.5`", "0.3`", 
       "0.36`", "3.657`", "2.9`", "55.70805327778022`", "True", 
       "2.6439512708960713`"},
      {"3", "\<\"HES\"\>", "\<\"Hess Corporation Common Stock\"\>", \
-"\<\"Independent Oil & Gas\"\>", "67.86`", "4132760", "2.041`*^10", "1.5`", 
+"\<\"Independent Oil & Gas\"\>", "67.86`", "4101500", "2.041`*^10", "1.5`", 
       "1.8`", "\<\"$21.39B\"\>", "\<\"19.9%\"\>", "5.08`", "0.8`", "1.`", 
       "2.14`", "2.586`", "2.3`", "155.73012512035044`", "True", 
       "2.2948736386730095`"},
      {"4", "\<\"TDW\"\>", "\<\"Tidewater Inc. Common Stock\"\>", "\<\"Oil & \
-Gas Equipment & Services\"\>", "29.68`", "1123470", "1.47`*^9", "3.4`", 
+Gas Equipment & Services\"\>", "29.68`", "1108640", "1.47`*^9", "3.4`", 
       "1.97`", "\<\"$1.52B\"\>", "\<\"10.6%\"\>", "9.22`", "0.5`", "1.`", 
       "1.5`", "5.076`", "2.7`", "63.63490345321504`", "True", 
       "2.14403313521614`"},
      {"5", "\<\"SM\"\>", "\<\"SM Energy Company Common Stock\"\>", \
-"\<\"Independent Oil & Gas\"\>", "30.29`", "1820910", "2.04`*^9", "0.3`", 
+"\<\"Independent Oil & Gas\"\>", "30.29`", "1801540", "2.04`*^9", "0.3`", 
       "1.43`", "\<\"$2.53B\"\>", "\<\"13.5%\"\>", "6.05`", "1.`", "0.8`", 
       "0.32`", "40.288`", "2", "57.103691474369676`", "True", 
       "1.8852324686157043`"},
      {"6", "\<\"MRO\"\>", "\<\"Marathon Oil Corporation Common\"\>", \
-"\<\"Independent Oil & Gas\"\>", "26.25`", "8225260", "1.772`*^10", "3.2`", 
+"\<\"Independent Oil & Gas\"\>", "26.25`", "8181360", "1.772`*^10", "3.2`", 
       "1.37`", "\<\"$14.14B\"\>", "\<\"17.6%\"\>", "7.26`", "0.9`", "1.3`", 
       "1.09`", "1.073`", "2.1`", "49.35431561677256`", "True", 
       "1.8801644044484787`"},
      {"7", "\<\"VLO\"\>", "\<\"Valero Energy Corporation Commo\"\>", "\<\"Oil \
-& Gas Refining & Marketing\"\>", "46.81`", "7783740", "2.44`*^10", "2.4`", 
+& Gas Refining & Marketing\"\>", "46.81`", "7651030", "2.44`*^10", "2.4`", 
       "2.03`", "\<\"$137.41B\"\>", "\<\"2.7%\"\>", "6.66`", "1.2`", "0.2`", 
       "0.42`", "31.063`", "2.1`", "78.81551603269499`", "True", 
       "1.6837324510295875`"},
      {"8", "\<\"TRN\"\>", "\<\"Trinity Industries, Inc. Common\"\>", \
-"\<\"Railroads\"\>", "27.86`", "4333340", "4.34`*^9", "1.4`", 
+"\<\"Railroads\"\>", "27.86`", "4374790", "4.34`*^9", "1.4`", 
       "1.23`", "\<\"$5.76B\"\>", "\<\"11.3%\"\>", "6.86`", "1.5`", "0.8`", 
       "0.67`", "75.154`", "1.7`", "41.28845761832234`", "True", 
       "1.4819977608873776`"},
      {"9", "\<\"TOT\"\>", "\<\"Total S.A.\"\>", "\<\"Major Integrated Oil & \
-Gas\"\>", "51.22`", "1776400", "1.1653`*^11", "5.`", 
+Gas\"\>", "51.22`", "1813960", "1.1653`*^11", "5.`", 
       "1.11`", "\<\"$212.72B\"\>", "\<\"5.4%\"\>", "10.07`", "1.2`", "0.5`", 
       "2.21`", "0.697`", "2.1`", "71.07206476527891`", "True", 
       "1.387584239853161`"},
      {"10", "\<\"COP\"\>", "\<\"ConocoPhillips Common Stock\"\>", \
-"\<\"Independent Oil & Gas\"\>", "63.61`", "8966150", "7.83`*^10", "4.6`", 
+"\<\"Independent Oil & Gas\"\>", "63.61`", "8847430", "7.83`*^10", "4.6`", 
       "0.77`", "\<\"$57.46B\"\>", "\<\"16.4%\"\>", "8.44`", "1.4`", "1.4`", 
       "1.29`", "1.02`", "2.1`", "87.27613011299252`", "True", 
       "1.372050465539892`"},
      {"11", "\<\"YPF\"\>", "\<\"YPF Sociedad Anonima Common Sto\"\>", \
-"\<\"Major Integrated Oil & Gas\"\>", "26.81`", "1999700", "1.051`*^10", 
+"\<\"Major Integrated Oil & Gas\"\>", "26.81`", "1942660", "1.051`*^10", 
       "1.1`", "2.31`", "\<\"$15.13B\"\>", "\<\"7.4%\"\>", "9.44`", "1.3`", 
       "0.7`", "0.1`", "1.369`", "2.6`", "36.564733008733974`", "True", 
       "1.3638468112172313`"},
      {"12", "\<\"CVX\"\>", "\<\"Chevron Corporation Common Stoc\"\>", \
-"\<\"Major Integrated Oil & Gas\"\>", "104.91`", "8664800", "1.9832`*^11", 
+"\<\"Major Integrated Oil & Gas\"\>", "104.91`", "8574740", "1.9832`*^11", 
       "4.1`", "1.11`", "\<\"$204.02B\"\>", "\<\"10.1%\"\>", "9.66`", "1.3`", 
       "1.`", "2.01`", "6.817`", "2.4`", "142.04405333381612`", "True", 
       "1.3539610459805178`"},
      {"13", "\<\"HP\"\>", "\<\"Helmerich & Payne, Inc. Common\"\>", "\<\"Oil \
-& Gas Drilling & Exploration\"\>", "61.67`", "2070650", "6.68`*^9", "4.4`", 
+& Gas Drilling & Exploration\"\>", "61.67`", "2073390", "6.68`*^9", "4.4`", 
       "0.79`", "\<\"$3.72B\"\>", "\<\"19.1%\"\>", "9.55`", "1.4`", "1.8`", 
       "10.03`", "25.623`", "2.4`", "81.0203641068096`", "True", 
       "1.3137727275305593`"},
      {"14", "\<\"MUR\"\>", "\<\"Murphy Oil Corporation Common S\"\>", \
-"\<\"Independent Oil & Gas\"\>", "45.66`", "1959310", "8.1`*^9", "3.1`", 
+"\<\"Independent Oil & Gas\"\>", "45.66`", "1926350", "8.1`*^9", "3.1`", 
       "1.3`", "\<\"$5.40B\"\>", "\<\"11.2%\"\>", "13.72`", "1.`", "1.5`", 
       "1.87`", "2.808`", "2.8`", "59.52880976888417`", "True", 
       "1.3037409060202403`"},
      {"15", "\<\"OXY\"\>", "\<\"Occidental Petroleum Corporatio\"\>", \
-"\<\"Independent Oil & Gas\"\>", "75.08`", "6665260", "5.822`*^10", "3.8`", 
+"\<\"Independent Oil & Gas\"\>", "75.08`", "6579610", "5.822`*^10", "3.8`", 
       "1.56`", "\<\"$24.53B\"\>", "\<\"23.1%\"\>", "10.47`", "1.3`", "2.4`", 
       "2.94`", "5.425`", "2.2`", "95.10201090145254`", "True", 
       "1.2666756912819996`"},
      {"16", "\<\"RS\"\>", "\<\"Reliance Steel & Aluminum Co. C\"\>", \
-"\<\"Steel & Iron\"\>", "60.29`", "669916", "4.71`*^9", "2.3`", 
+"\<\"Steel & Iron\"\>", "60.29`", "662058", "4.71`*^9", "2.3`", 
       "1.31`", "\<\"$10.18B\"\>", "\<\"3.3%\"\>", "13.88`", "1.1`", "0.5`", 
       "1.29`", "13.173`", "2", "71.72412021070737`", "True", 
       "1.1896520187544761`"},
      {"17", "\<\"MS\"\>", "\<\"Morgan Stanley Common Stock\"\>", \
-"\<\"Investment Brokerage - National\"\>", "37.4`", "9741420", "7.321`*^10", 
+"\<\"Investment Brokerage - National\"\>", "37.4`", "9524130", "7.321`*^10", 
       "1.1`", "2.31`", "\<\"$34.15B\"\>", "\<\"15.2%\"\>", "14.94`", "1.1`", 
       "2.1`", "0.6`", "9.213`", "2.5`", "43.86997150671516`", "True", 
       "1.1729938905538813`"},
      {"18", "\<\"HFC\"\>", "\<\"HollyFrontier Corporation Commo\"\>", \
-"\<\"Oil & Gas Refining & Marketing\"\>", "37.79`", "2415700", "7.39`*^9", 
+"\<\"Oil & Gas Refining & Marketing\"\>", "37.79`", "2385270", "7.39`*^9", 
       "3.4`", "1.49`", "\<\"$20.31B\"\>", "\<\"2.8%\"\>", "13.34`", "1.2`", 
       "0.4`", "1.3`", "16.908`", "2.5`", "44.119367175878665`", "True", 
       "1.167487885045744`"},
      {"19", "\<\"MDU\"\>", "\<\"MDU Resources Group, Inc. Commo\"\>", \
-"\<\"Diversified Utilities\"\>", "22.62`", "1159610", "4.39`*^9", "3.2`", 
+"\<\"Diversified Utilities\"\>", "22.62`", "1153280", "4.39`*^9", "3.2`", 
       "0.75`", "\<\"$4.69B\"\>", "\<\"6.5%\"\>", "14.22`", "1.4`", "0.9`", 
       "2.99`", "2.246`", "2.8`", "23.793643321273855`", "True", 
       "1.051885204300347`"}
@@ -1602,7 +1566,8 @@ Gas\"\>", "51.22`", "1776400", "1.1653`*^11", "5.`",
    3.6285986121792593`*^9, 3.6285986781589622`*^9, 3.62859889458294*^9, 
    3.628598989373424*^9, 3.628599855934885*^9, 3.628600167305828*^9, 
    3.628600407528081*^9, 3.628600909446323*^9, 3.6286011580275307`*^9, 
-   3.628601349215302*^9, 3.628618795620171*^9, 3.628644100580167*^9}]
+   3.628601349215302*^9, 3.628618795620171*^9, 3.628644100580167*^9, 
+   3.629116712716735*^9}]
 }, Open  ]],
 
 Cell[BoxData[
@@ -1766,7 +1731,7 @@ Refining & Marketing\"\>", "37.79`", "3.4`", "13.34`", "1.2`", "0.4`",
    3.628554226631208*^9, 3.628556155576354*^9, 3.628556835804003*^9, 
    3.628558937296988*^9, 3.6286005689353037`*^9, 3.628600909600608*^9, 
    3.628601158105946*^9, 3.6286013492676477`*^9, 3.628607523616741*^9, 
-   3.62864410066006*^9}]
+   3.62864410066006*^9, 3.629116712814601*^9}]
 }, Open  ]],
 
 Cell[BoxData[
@@ -2095,50 +2060,41 @@ Cell[3302, 76, 953, 23, 103, "Input"],
 Cell[4258, 101, 501, 12, 31, "Input"],
 Cell[4762, 115, 2057, 45, 133, "Input"],
 Cell[6822, 162, 1166, 25, 73, "Input"],
+Cell[7991, 189, 17202, 367, 1003, "Input"],
+Cell[25196, 558, 3986, 84, 208, "Input"],
+Cell[29185, 644, 139, 2, 27, "Input"],
+Cell[29327, 648, 818, 23, 58, "Input"],
+Cell[30148, 673, 1560, 33, 133, "Input"],
+Cell[31711, 708, 23516, 546, 1633, "Input"],
 Cell[CellGroupData[{
-Cell[8013, 191, 353, 4, 43, "Input"],
-Cell[8369, 197, 332, 4, 43, "Output"]
-}, Open  ]],
-Cell[8716, 204, 17202, 367, 1003, "Input"],
-Cell[25921, 573, 3986, 84, 208, "Input"],
-Cell[29910, 659, 139, 2, 27, "Input"],
-Cell[30052, 663, 818, 23, 58, "Input"],
-Cell[30873, 688, 1560, 33, 133, "Input"],
-Cell[32436, 723, 24067, 551, 1648, "Input"],
+Cell[55252, 1258, 291, 5, 27, "Input"],
 Cell[CellGroupData[{
-Cell[56528, 1278, 506, 11, 73, "Input"],
-Cell[57037, 1291, 150, 3, 27, "Output"],
-Cell[57190, 1296, 151, 3, 27, "Output"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[57378, 1304, 291, 5, 27, "Input"],
-Cell[CellGroupData[{
-Cell[57694, 1313, 888, 12, 20, "Print"],
-Cell[58585, 1327, 920, 13, 20, "Print"],
-Cell[59508, 1342, 895, 12, 20, "Print"],
-Cell[60406, 1356, 883, 12, 20, "Print"],
-Cell[61292, 1370, 896, 12, 20, "Print"],
-Cell[62191, 1384, 892, 12, 20, "Print"],
-Cell[63086, 1398, 918, 13, 20, "Print"],
-Cell[64007, 1413, 928, 13, 20, "Print"],
-Cell[64938, 1428, 908, 13, 20, "Print"],
-Cell[65849, 1443, 1065, 17, 20, "Print"]
+Cell[55568, 1267, 913, 13, 20, "Print"],
+Cell[56484, 1282, 945, 14, 20, "Print"],
+Cell[57432, 1298, 921, 13, 20, "Print"],
+Cell[58356, 1313, 907, 13, 20, "Print"],
+Cell[59266, 1328, 920, 13, 20, "Print"],
+Cell[60189, 1343, 918, 13, 20, "Print"],
+Cell[61110, 1358, 944, 14, 20, "Print"],
+Cell[62057, 1374, 954, 14, 20, "Print"],
+Cell[63014, 1390, 932, 14, 20, "Print"],
+Cell[63949, 1406, 1091, 18, 20, "Print"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[66963, 1466, 326, 7, 27, "Input"],
-Cell[67292, 1475, 7706, 129, 399, "Output"]
+Cell[65089, 1430, 326, 7, 27, "Input"],
+Cell[65418, 1439, 7732, 130, 399, "Output"]
 }, Open  ]],
-Cell[75013, 1607, 2129, 55, 103, "Input"],
+Cell[73165, 1572, 2129, 55, 103, "Input"],
 Cell[CellGroupData[{
-Cell[77167, 1666, 794, 19, 27, "Input"],
-Cell[77964, 1687, 4725, 81, 329, "Output"]
+Cell[75319, 1631, 794, 19, 27, "Input"],
+Cell[76116, 1652, 4747, 81, 329, "Output"]
 }, Open  ]],
-Cell[82704, 1771, 1921, 44, 103, "Input"],
-Cell[84628, 1817, 1738, 40, 133, "Input"],
-Cell[86369, 1859, 1601, 36, 133, "Input"],
-Cell[87973, 1897, 1782, 39, 133, "Input"],
-Cell[89758, 1938, 7011, 133, 493, "Input"]
+Cell[80878, 1736, 1921, 44, 103, "Input"],
+Cell[82802, 1782, 1738, 40, 133, "Input"],
+Cell[84543, 1824, 1601, 36, 133, "Input"],
+Cell[86147, 1862, 1782, 39, 133, "Input"],
+Cell[87932, 1903, 7011, 133, 493, "Input"]
 }
 ]
 *)
